@@ -1,0 +1,99 @@
+body,form,tr,td,input,textarea,ul,li,p,h1,h2,h3,h4,h5,h6,img{
+	margin: 0;
+	padding: 0;
+}
+h1,h2,h3,h4,h5,h6{ font-weight: normal; }
+div{ position: relative; }
+img{ border: none; }
+ul{	list-style-type: none; }
+em{ font-style: normal; }
+a{ text-decoration: none; }
+a:hover{ text-decoration: underline; }
+
+*{
+	font-family: 'Microsoft Yahei';
+	/*font-family: 'Consolas';*/
+}
+
+/* public class start */
+.clearfix{
+	zoom: 1;
+}
+.clearfix:after{
+	content: "";
+	visibility: hidden;
+	display: block;
+	height: 0;
+	line-height: 0;
+	font-size: 0;
+	clear: both;
+}
+.ohinput{
+	margin: 0;
+	padding: 0px 6px;
+	width: 100px;
+	height: 24px;
+	line-height: 24px;
+	border: 1px #AAF solid;
+	border-radius: 2px;
+}
+/* public class end */
+
+.TrainingCamp{
+	display: inline;
+	float: left;
+	padding: 10px;
+	font-size: 14px;
+	background-color: #F5F5F5;
+	/*color: #FFF;
+	text-shadow: 2px 2px 4px #000;*/
+}
+.TrainingCamp table{
+}
+.TrainingCamp table tr{
+}
+.TrainingCamp table tr th{
+	padding: 2px 6px;
+}
+.TrainingCamp table tr td{
+	padding: 0 6px;
+	text-align: center;
+}
+.TrainingCamp table tr td img.img_face{
+	width: 54px;
+	height: 54px;
+	/*background-color: #FFF;*/
+}
+.TrainingCamp table tr td input.input_lev{
+	width: 32px;
+}
+.TrainingCamp table tr td input.input_num{
+	width: 50px;
+}
+.TrainingCamp table tr td p{
+	position: relative;
+	padding: 0;
+	display: inline-block;
+}
+.TrainingCamp table tr td p b.icon_waterdrop{
+	display: inline-block;
+	width: 19px;
+	height: 5px;
+	zoom: 1;
+}
+.TrainingCamp table tr td p b.icon_waterdrop:after{
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: inline-block;
+	width: 16px;
+	height: 18px;
+	background-image: url(../images/waterdrop.png);
+	background-size: 100% 100%;
+}
+.TrainingCamp table tr.wrong{
+	background-color: #F55;
+	color: #FFF;
+}
+

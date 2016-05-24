@@ -1,0 +1,27 @@
+/* Public */
+body,form,tr,td,input,textarea,ul,li,p,h1,h2,h3,h4,h5,h6,img{
+	margin: 0;
+	padding: 0;
+}
+h1,h2,h3,h4,h5,h6{ font-weight: normal; }
+div{ position: relative; }
+img{ border: none; }
+ul{	list-style-type: none; }
+em{ font-style: normal; }
+a{ text-decoration: none; }
+a:hover{ text-decoration: underline; }
+
+/* Variable */
+
+/* Class */
+.clearfix{ zoom: 1; }
+.clearfix:after{ content: ""; display: block; visibility: hidden; height: 0; line-height: 0; font-size: 0; clear: both; }
+
+/* Code */
+*{
+	font-family: 'Microsoft Yahei';
+}
+
+
+
+
