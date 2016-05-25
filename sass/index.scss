@@ -10,6 +10,7 @@ ul{	list-style-type: none; }
 em{ font-style: normal; }
 a{ text-decoration: none; }
 a:hover{ text-decoration: underline; }
+*{ font-family: 'Microsoft Yahei'; }
 
 /* Variable */
 
@@ -18,10 +19,10 @@ a:hover{ text-decoration: underline; }
 .clearfix:after{ content: ""; display: block; visibility: hidden; height: 0; line-height: 0; font-size: 0; clear: both; }
 
 /* Code */
-*{
-	font-family: 'Microsoft Yahei';
+a{
+	text-decoration: underline;
+	color: #000;
 }
-
-
-
-
+a:hover{
+	color: #33F;
+}
