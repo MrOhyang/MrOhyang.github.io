@@ -21,19 +21,31 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        react: {
+            files: {
+                expand: true,
+                cwd: 'js/react/src',
+                src: ['**/*.js'],
+                dest: 'js/react/build/',
+                ext: '.js'
+            }
+        },
         watch: {
-            scripts: {
-                files: [
-                    'sass/**/*.scss'
-                ],
-                task: ['sass']
+            css: {
+                files: ['sass/**/*.scss'],
+                tasks: ['sass']
+            },
+            jsxTransition:{
+                files: ['js/react/src/**/*.js'],
+                tasks: ['react']
             }
         }
     });
 
     // 加载包含 "Tast" 任务的插件。
-    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-react');
 
     // 默认被执行的任务列表。
     grunt.registerTask('default', ['sass', 'watch']);
