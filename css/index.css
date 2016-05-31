@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* Public */
 body, form, tr, td, input, textarea, ul, li, p, h1, h2, h3, h4, h5, h6, img {
   margin: 0;
@@ -33,9 +34,10 @@ a:hover {
 }
 
 * {
-  font-family: 'Microsoft Yahei';
+  font-family: 'Consolas';
 }
 
+/**{ font-family: 'Consolas','Microsoft Yahei'; }*/
 /* Variable */
 /* Class */
 .clearfix {
@@ -53,11 +55,63 @@ a:hover {
 }
 
 /* Code */
-a {
-  text-decoration: underline;
-  color: #000;
+body {
+  font-size: 1rem;
 }
 
-a:hover {
-  color: #33F;
+h1 {
+  font-size: 2rem;
+}
+
+.f_app {
+  background-color: #3A3AFE;
+}
+
+.f_app .app_title {
+  margin: 0 auto;
+  max-width: 600px;
+  height: 3rem;
+  line-height: 3rem;
+  text-align: center;
+  color: #FFF;
+}
+
+/* 个人基础信息 */
+.fd_info {
+  background-color: #EEEFF5;
+}
+
+.fd_info .d_basicInfo {
+  margin: 0 auto;
+  padding: 4% 4%;
+  max-width: 600px;
+  /*background-color: blue;*/
+}
+
+.fd_info .d_basicInfo h1 {
+  padding-bottom: 0.6rem;
+  font-family: 'Arial';
+}
+
+.fd_info .d_basicInfo ul {
+  padding-left: 4%;
+  font-size: 0.85rem;
+  line-height: 1.2rem;
+}
+
+.fd_info .d_basicInfo ul li span.span_left {
+  float: left;
+  width: 20%;
+}
+
+.fd_info .d_basicInfo ul li span.span_right {
+  float: left;
+}
+
+.fd_info .d_basicInfo ul li span.span_right a {
+  color: #00F;
+}
+
+.fd_info .d_basicInfo ul li span.span_right a:hover {
+  text-decoration: underline;
 }

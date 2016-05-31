@@ -10,19 +10,68 @@ ul{	list-style-type: none; }
 em{ font-style: normal; }
 a{ text-decoration: none; }
 a:hover{ text-decoration: underline; }
-*{ font-family: 'Microsoft Yahei'; }
+*{ font-family: 'Consolas' }
+/**{ font-family: 'Consolas','Microsoft Yahei'; }*/
 
 /* Variable */
-
+$WEBWIDTH: 600px;
+ 
 /* Class */
 .clearfix{ zoom: 1; }
 .clearfix:after{ content: ""; display: block; visibility: hidden; height: 0; line-height: 0; font-size: 0; clear: both; }
 
 /* Code */
-a{
-	text-decoration: underline;
-	color: #000;
+body{
+	font-size: 1rem;
 }
-a:hover{
-	color: #33F;
+h1{
+	font-size: 2rem;
+}
+.f_app{
+	background-color: #3A3AFE;
+	.app_title{
+		margin: 0 auto;
+		max-width: $WEBWIDTH;
+		height: 3rem;
+		line-height: 3rem;
+		text-align: center;
+		color: #FFF;
+	}
+}
+
+/* 个人基础信息 */
+.fd_info{
+	background-color: #EEEFF5;
+	.d_basicInfo{
+		margin: 0 auto;
+		padding: 4% 4%;
+		max-width: $WEBWIDTH;
+		/*background-color: blue;*/
+		h1{
+			padding-bottom: 0.6rem;
+			font-family: 'Arial';
+		}
+		ul{
+			padding-left: 4%;
+			font-size: 0.85rem;
+			line-height: 1.2rem;
+			li{
+				span{
+				}
+				span.span_left{
+					float: left;
+					width: 20%;
+				}
+				span.span_right{
+					float: left;
+					a{
+						color: #00F;
+					}
+					a:hover{
+						text-decoration: underline;
+					}
+				}
+			}
+		}
+	}
 }
