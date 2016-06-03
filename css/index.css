@@ -76,16 +76,17 @@ h1 {
   color: #FFF;
 }
 
-/* 个人基础信息 */
 .fd_info {
   background-color: #EEEFF5;
+  /* 个人基础信息 */
+  /* 专业技能 */
 }
 
-.fd_info .d_basicInfo {
+.fd_info .d_basicInfo, .fd_info .d_skillsInfo {
   margin: 0 auto;
-  padding: 4% 4%;
+  padding: 1rem 4%;
   max-width: 600px;
-  /*background-color: blue;*/
+  border-bottom: 1px #CCC solid;
 }
 
 .fd_info .d_basicInfo h1 {
@@ -114,4 +115,23 @@ h1 {
 
 .fd_info .d_basicInfo ul li span.span_right a:hover {
   text-decoration: underline;
+}
+
+.fd_info .d_skillsInfo h2 {
+  padding-bottom: 0.6rem;
+  font-size: 1.2rem;
+  font-family: 'Arial';
+}
+
+.fd_info .d_skillsInfo p {
+  font-size: 0.85rem;
+  line-height: 1.2rem;
+}
+
+.fd_info .d_skillsInfo .d_indent {
+  padding-left: 4%;
+}
+
+.fd_info .d_skillsInfo .d_indent .d_indent {
+  padding-left: 12%;
 }
