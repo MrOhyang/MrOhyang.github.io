@@ -103,6 +103,32 @@ var GAMEDATA = {
 }
 
 var Camp = React.createClass({
+	getInitialState: function(){
+		var data = {data: {
+			listTotal: []
+		}};
+		for( var key in GAMEDATA.soldier ){
+			data.data.listTotal.push({
+				cost: 0,
+				size: 0
+			});
+		}
+		return data;
+	},
+	setStateOfTotal: function(id, cost, size){
+		var data = JSON.parse(JSON.stringify(this.state));
+		for( var key in GAMEDATA.soldier ){
+			if( GAMEDATA.soldier[key].id === id ){
+				break;
+			}
+		}
+		data.data.listTotal[key] = {
+			cost: cost,
+			size: size
+		}
+		console.log(data);
+		this.setState(data);
+	},
 	render: function(){
 		var count = 0;
 		var listNodes = GAMEDATA.soldier.map(function(oneData){
@@ -111,9 +137,16 @@ var Camp = React.createClass({
 				size: oneData.size
 			}
 			return (
-				<List key={'list_'+count++} data={data} />
+				<List key={'list_'+count++} data={data} funcs={this.setStateOfTotal} />
 			);
-		});
+		}.bind(this));
+
+		var allTotalCost = 0;
+		var allTotalSize = 0;
+		for( var key in this.state.data.listTotal ){
+			allTotalCost += this.state.data.listTotal[key].cost;
+			allTotalSize += this.state.data.listTotal[key].size;
+		}
 		return (
 			<div className="TrainingCamp">
 				<table cellSpacing="0">
@@ -134,8 +167,8 @@ var Camp = React.createClass({
 							<td></td>
 							<td></td>
 							<td></td>
-							<td><p>totalCost<b className="icon_waterdrop"></b></p></td>
-							<td>totalSize</td>
+							<td><p>{allTotalCost}<b className="icon_waterdrop"></b></p></td>
+							<td>{allTotalSize}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -180,7 +213,16 @@ var List = React.createClass({
 		}else{
 			data.data.wrong = true;
 		}
+
 		this.setState(data);
+
+		var totalCost = this.state.data.cost * data.data.num;
+		var totalSize = this.props.data.size * data.data.num;
+		this.props.funcs(
+			this.props.data.id,
+			totalCost,
+			totalSize
+		);
 	},
 	changeNum: function(){
 		var data = JSON.parse(JSON.stringify(this.state));
@@ -191,7 +233,16 @@ var List = React.createClass({
 		}else{
 			data.data.wrong = true;
 		}
+
 		this.setState(data);
+
+		var totalCost = this.state.data.cost * data.data.num;
+		var totalSize = this.props.data.size * data.data.num;
+		this.props.funcs(
+			this.props.data.id,
+			totalCost,
+			totalSize
+		);
 	},
 	render: function(){
 		var data = {

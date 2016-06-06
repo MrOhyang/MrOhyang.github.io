@@ -103,6 +103,32 @@ var GAMEDATA = {
 }
 
 var Camp = React.createClass({displayName: "Camp",
+	getInitialState: function(){
+		var data = {data: {
+			listTotal: []
+		}};
+		for( var key in GAMEDATA.soldier ){
+			data.data.listTotal.push({
+				cost: 0,
+				size: 0
+			});
+		}
+		return data;
+	},
+	setStateOfTotal: function(id, cost, size){
+		var data = JSON.parse(JSON.stringify(this.state));
+		for( var key in GAMEDATA.soldier ){
+			if( GAMEDATA.soldier[key].id === id ){
+				break;
+			}
+		}
+		data.data.listTotal[key] = {
+			cost: cost,
+			size: size
+		}
+		console.log(data);
+		this.setState(data);
+	},
 	render: function(){
 		var count = 0;
 		var listNodes = GAMEDATA.soldier.map(function(oneData){
@@ -111,9 +137,16 @@ var Camp = React.createClass({displayName: "Camp",
 				size: oneData.size
 			}
 			return (
-				React.createElement(List, {key: 'list_'+count++, data: data})
+				React.createElement(List, {key: 'list_'+count++, data: data, funcs: this.setStateOfTotal})
 			);
-		});
+		}.bind(this));
+
+		var allTotalCost = 0;
+		var allTotalSize = 0;
+		for( var key in this.state.data.listTotal ){
+			allTotalCost += this.state.data.listTotal[key].cost;
+			allTotalSize += this.state.data.listTotal[key].size;
+		}
 		return (
 			React.createElement("div", {className: "TrainingCamp"}, 
 				React.createElement("table", {cellSpacing: "0"}, 
@@ -134,8 +167,8 @@ var Camp = React.createClass({displayName: "Camp",
 							React.createElement("td", null), 
 							React.createElement("td", null), 
 							React.createElement("td", null), 
-							React.createElement("td", null, React.createElement("p", null, "totalCost", React.createElement("b", {className: "icon_waterdrop"}))), 
-							React.createElement("td", null, "totalSize")
+							React.createElement("td", null, React.createElement("p", null, allTotalCost, React.createElement("b", {className: "icon_waterdrop"}))), 
+							React.createElement("td", null, allTotalSize)
 						)
 					)
 				)
@@ -180,7 +213,16 @@ var List = React.createClass({displayName: "List",
 		}else{
 			data.data.wrong = true;
 		}
+
 		this.setState(data);
+
+		var totalCost = this.state.data.cost * data.data.num;
+		var totalSize = this.props.data.size * data.data.num;
+		this.props.funcs(
+			this.props.data.id,
+			totalCost,
+			totalSize
+		);
 	},
 	changeNum: function(){
 		var data = JSON.parse(JSON.stringify(this.state));
@@ -191,7 +233,16 @@ var List = React.createClass({displayName: "List",
 		}else{
 			data.data.wrong = true;
 		}
+
 		this.setState(data);
+
+		var totalCost = this.state.data.cost * data.data.num;
+		var totalSize = this.props.data.size * data.data.num;
+		this.props.funcs(
+			this.props.data.id,
+			totalCost,
+			totalSize
+		);
 	},
 	render: function(){
 		var data = {
