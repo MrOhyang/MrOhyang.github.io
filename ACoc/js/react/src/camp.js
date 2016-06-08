@@ -1,6 +1,7 @@
 var GAMEDATA = {
 	soldier: [{
 		id: 'barbarian',
+		size: 1,
 		costObj: {
 			'1': 25,
 			'2': 40,
@@ -12,6 +13,7 @@ var GAMEDATA = {
 		}
 	},{
 		id: 'archer',
+		size: 1,
 		costObj: {
 			'1': 50,
 			'2': 80,
@@ -23,6 +25,7 @@ var GAMEDATA = {
 		}
 	},{
 		id: 'titan',
+		size: 5,
 		costObj: {
 			'1': 250,
 			'2': 750,
@@ -34,6 +37,7 @@ var GAMEDATA = {
 		}
 	},{
 		id: 'goblin',
+		size: 1,
 		costObj: {
 			'1': 25,
 			'2': 40,
@@ -45,6 +49,7 @@ var GAMEDATA = {
 		}
 	},{
 		id: 'bomberman',
+		size: 2,
 		costObj: {
 			'1': 1000,
 			'2': 1500,
@@ -55,6 +60,7 @@ var GAMEDATA = {
 		}
 	},{
 		id: 'balloonist',
+		size: 5,
 		costObj: {
 			'1': 2000,
 			'2': 2500,
@@ -65,6 +71,7 @@ var GAMEDATA = {
 		}
 	},{
 		id: 'wizard',
+		size: 4,
 		costObj: {
 			'1': 1500,
 			'2': 2000,
@@ -75,6 +82,7 @@ var GAMEDATA = {
 		}
 	},{
 		id: 'healer',
+		size: 14,
 		costObj: {
 			'1': 5000,
 			'2': 6000,
@@ -83,6 +91,7 @@ var GAMEDATA = {
 		}
 	},{
 		id: 'dragon',
+		size: 20,
 		costObj: {
 			'1': 25000,
 			'2': 30000,
@@ -90,90 +99,82 @@ var GAMEDATA = {
 			'4': 37000,
 			'5': 42000
 		}
+	},{
+		id: 'pika',
+		size: 25,
+		costObj: {
+			'1': 28000,
+			'2': 32000,
+			'3': 36000,
+			'4': 40000,
+			'5': 45000
+		}
+	},{
+		id: 'baby_dragon',
+		size: 10,
+		costObj: {
+			'1': 15000,
+			'2': 16000,
+			'3': 17000,
+			'4': 18000
+		}
+	},{
+		id: 'miners_dig',
+		size: 5,
+		costObj: {
+			'1': 4200,
+			'2': 4800,
+			'3': 5400,
+			'4': 6000
+		}
 	}]
-}
-
-var allData = {data: {
-	totalCost: 0,
-	totalSize: 0,
-	list: [{
-		id: 'barbarian',
-		imgName: 'barbarian-1.png',
-		size: 1
-	},{
-		id: 'archer',
-		imgName: 'archer-1.png',
-		size: 1
-	},{
-		id: 'titan',
-		imgName: 'titan-1.png',
-		size: 5
-	},{
-		id: 'goblin',
-		imgName: 'goblin-1.png',
-		size: 1
-	},{
-		id: 'bomberman',
-		imgName: 'bomberman-1.png',
-		size: 2
-	},{
-		id: 'balloonist',
-		imgName: 'balloonist-1.png',
-		size: 5
-	},{
-		id: 'wizard',
-		imgName: 'wizard-1.png',
-		size: 4
-	},{
-		id: 'healer',
-		imgName: 'healer-1.png',
-		size: 14
-	},{
-		id: 'dragon',
-		imgName: 'dragon-1.png',
-		size: 20
-	}]
-}};
-for( var key in allData.data.list ){
-	allData.data.list[key].level = 1;
-	allData.data.list[key].num = 0;
-	allData.data.list[key].cost = GAMEDATA.soldier[key].costObj[1];
-	allData.data.list[key].totalCost = 0;
-	allData.data.list[key].totalSize = 0;
-	allData.data.list[key].wrong = false;
 }
 
 var Camp = React.createClass({
 	getInitialState: function(){
-		return allData;
+		var data = {data: {
+			listTotal: []
+		}};
+		for( var key in GAMEDATA.soldier ){
+			data.data.listTotal.push({
+				cost: 0,
+				size: 0
+			});
+		}
+		return data;
 	},
-	compute: function(data){
-		var allData = {
-			data: JSON.parse(JSON.stringify(this.state.data))
-		};
-		for( var key in allData.data.list ){
-			if( allData.data.list[key].id === data.id ){
-				allData.data.list[key].cost = data.cost;
-				allData.data.list[key].totalCost = data.totalCost;
-				allData.data.list[key].totalSize = data.totalSize;
-				allData.data.list[key].wrong = data.wrong;
+	setStateOfTotal: function(id, cost, size){
+		var data = JSON.parse(JSON.stringify(this.state));
+		for( var key in GAMEDATA.soldier ){
+			if( GAMEDATA.soldier[key].id === id ){
 				break;
 			}
 		}
-		allData.data.totalCost = allData.data.totalSize = 0;
-		allData.data.list.map(function(oneListData){
-			this.data.totalCost += oneListData.totalCost;
-			this.data.totalSize += oneListData.totalSize;
-		}.bind(allData));
-		this.setState(allData);
+		data.data.listTotal[key] = {
+			cost: cost,
+			size: size
+		}
+		console.log(data);
+		this.setState(data);
 	},
 	render: function(){
 		var count = 0;
-		var listNodes = this.state.data.list.map(function(oneListData){
+		var listNodes = GAMEDATA.soldier.map(function(oneData){
+			var data = {
+				id: oneData.id,
+				size: oneData.size
+			}
 			return (
-				<List key={'list_'+count++} data={oneListData} func={this.compute} />
+				<List key={'list_'+count++} data={data} funcs={this.setStateOfTotal} />
 			);
 		}.bind(this));
+
+		var allTotalCost = 0;
+		var allTotalSize = 0;
+		for( var key in this.state.data.listTotal ){
+			allTotalCost += this.state.data.listTotal[key].cost;
+			allTotalSize += this.state.data.listTotal[key].size;
+		}
 		return (
 			<div className="TrainingCamp">
 				<table cellSpacing="0">
@@ -194,8 +195,8 @@ var Camp = React.createClass({
 							<td></td>
 							<td></td>
 							<td></td>
-							<td><p>{this.state.data.totalCost}<b className="icon_waterdrop"></b></p></td>
-							<td>{this.state.data.totalSize}</td>
+							<td><p>{allTotalCost}<b className="icon_waterdrop"></b></p></td>
+							<td>{allTotalSize}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -205,72 +206,104 @@ var Camp = React.createClass({
 });
 
 var List = React.createClass({
-	componentDidMount: function(){
-		this.refs.level.value = this.props.data.level;
-		this.refs.num.value = this.props.data.num;
-	},
-	changeCost: function(){
-		var cost = null;
-		var wrong = false;
-		for( var key in GAMEDATA.soldier ){
-			if( GAMEDATA.soldier[key].id === this.props.data.id ){
-				cost = GAMEDATA.soldier[key].costObj[this.refs.level.value];
+	getInitialState: function(){
+		var data = {data: {
+			level: 1,
+			num: 0,
+			wrong: false
+		}};
+		for(var key in GAMEDATA.soldier){
+			if(GAMEDATA.soldier[key].id == this.props.data.id){
+				data.data.cost = GAMEDATA.soldier[key].costObj[data.data.level];
 				break;
 			}
 		}
-		if( !cost ){
-			wrong = true;
-		}
-		this.compute(cost, wrong);
+		return data;
 	},
-	compute: function(flag, wrong){
-		var data = {
-			id: this.props.data.id,
-			imgName: this.props.data.imgName,
-			cost: 0,
-			num: ~~this.refs.num.value,
-			totalCost: 0,
-			totalSize: 0,
-			wrong: false
+	componentDidMount: function(){
+		this.refs.level.value = this.state.data.level;
+		this.refs.num.value = 0;
+	},
+	changeLevel: function(){
+		var data = JSON.parse(JSON.stringify(this.state));
+		var level = this.refs.level.value;
+		var cost = null;
+		for(var key in GAMEDATA.soldier){
+			if(GAMEDATA.soldier[key].id === this.props.data.id){
+				cost = GAMEDATA.soldier[key].costObj[level];
+				break;
+			}
 		}
-		if(typeof flag === 'number'){
-			data.cost = flag;
+		if(!!cost){
+			data.data.level = level;
+			data.data.cost = cost;
+			data.data.wrong = false;
 		}else{
-			data.cost = this.props.data.cost;
+			data.data.wrong = true;
 		}
-		if( data.num < 0 || !!wrong || ~~this.refs.level.value<=0 ){
-			data.wrong = true;
+
+		this.setState(data);
+
+		var totalCost = this.state.data.cost * data.data.num;
+		var totalSize = this.props.data.size * data.data.num;
+		this.props.funcs(
+			this.props.data.id,
+			totalCost,
+			totalSize
+		);
+	},
+	changeNum: function(){
+		var data = JSON.parse(JSON.stringify(this.state));
+		var num = this.refs.num.value;
+		if(num >= 0 && num == ~~num){
+			data.data.num = num;
+			data.data.wrong = false;
+		}else{
+			data.data.wrong = true;
 		}
-		data.totalCost = data.cost * data.num;
-		data.totalSize = this.props.data.size * data.num;
-		this.props.func(data);
+
+		this.setState(data);
+
+		var totalCost = this.state.data.cost * data.data.num;
+		var totalSize = this.props.data.size * data.data.num;
+		this.props.funcs(
+			this.props.data.id,
+			totalCost,
+			totalSize
+		);
 	},
 	render: function(){
-		var wrongClass = '';
-		if( this.props.data.wrong ){
-			wrongClass = 'wrong';
+		var data = {
+			totalCost: this.state.data.cost * this.state.data.num,
+			totalSize: this.props.data.size * this.state.data.num
+		}
+		var allClass = '';
+		if( this.state.data.wrong ){
+			allClass = 'wrong';
+		}else if( this.state.data.num > 0 ){
+			allClass = 'have';
 		}
 		return (
-			<tr className={wrongClass}>
-				<td><img className="img_face" src={'./images/soldier/'+this.props.data.imgName} /></td>
+			<tr className={allClass}>
+				<td><img className="img_face" src={'./images/soldier/'+this.props.data.id+'.png'} /></td>
 				<td>
 					<input className="ohinput input_lev"
 						   type="text"
 						   placeholder="level"
 						   ref="level"
-						   onChange={this.changeCost} />
+						   onChange={this.changeLevel} />
 				</td>
 				<td>{this.props.data.size}</td>
-				<td><p>{this.props.data.cost}<b className="icon_waterdrop"></b></p></td>
+				<td><p>{this.state.data.cost}<b className="icon_waterdrop"></b></p></td>
 				<td>
 					<input className="ohinput input_num"
 						   type="text"
 						   placeholder="num"
 						   ref="num"
-						   onChange={this.compute} />
+						   onChange={this.changeNum} />
 				</td>
-				<td><p>{this.props.data.totalCost}<b className="icon_waterdrop"></b></p></td>
-				<td>{this.props.data.totalSize}</td>
+				<td><p>{data.totalCost}<b className="icon_waterdrop"></b></p></td>
+				<td>{data.totalSize}</td>
 			</tr>
 		);
 	}
