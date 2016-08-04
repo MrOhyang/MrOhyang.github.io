@@ -25,13 +25,17 @@
     <i class="icon-spinner icon-spin"></i>
 </div>
 
-<div ng-repeat="section in model.textObj">
-    <!-- 段落标题 -->
-    <div><h4>{{section.header.number + '、' + section.header.title}}</h4></div>
-    <!-- 数据 -->
-    <div ng-repeat="p in section.body">
-        <p ng-if="p.type=='text'">{{p.data}}</p>
-        <pre ng-if="p.type=='code'">{{p.data}}</pre>
+<div class="d_content">
+    <div class="content">
+        <div ng-repeat="section in model.textObj">
+            <!-- 段落标题 -->
+            <div><h4>{{section.header.number + '、' + section.header.title}}</h4></div>
+            <!-- 数据 -->
+            <div ng-repeat="p in section.body">
+                <p ng-if="p.type=='text'">{{p.data}}</p>
+                <pre ng-if="p.type=='code'">{{p.data}}</pre>
+            </div>
+        </div>
     </div>
 </div>
 

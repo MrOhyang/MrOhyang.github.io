@@ -9,8 +9,11 @@ html{
 body,ul,li{
     margin: 0;
     padding: 0;
+    font-size: 1rem;
     font-family: "consolas",Microsoft Yahei;
+    text-align: justify;
 }
+h1,h2,h3,h4,h5,h6{ margin-top: 30px; font-weight: bold; }
 p{ padding: 4px 0; }
 ul{ list-style-type: none; }
 
@@ -39,16 +42,18 @@ ul{ list-style-type: none; }
 }
 
 /* Code */
+body{
+    background-color: #EEE;
+}
 .d_content{
+    padding: 80px 0;
     width: 100%;
     .content{
         margin: 0 auto;
         padding: 12px 22px;
         max-width: 900px;
-        /*background-color: #272822;*/
-        background-color: #EEE;
-        /*border: 1px #AAA solid;*/
-        /*color: #FFF;*/
+        background-color: #FFFFFF;
+        border-radius: 10px;
     }
 }
 pre{
@@ -56,4 +61,7 @@ pre{
     background-color: #373832;
     border: none;
     color: #FFF;
+}
+p{
+    text-indent: 2rem;
 }
