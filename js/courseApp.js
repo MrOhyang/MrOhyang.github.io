@@ -54,7 +54,7 @@ app.controller('publicCtrl', function($scope){
 				data: '我们利用 jquery 想要去获取文档中的某个元素，可以通过 jquery 封装好的选择器去选中它。例如：'
 			},{
 				type: 'code',
-				data: '<!-- JS -->\n<sctipt>\nvar a = $(\'#div1\');       \/\/ 获取了 id 为 div1 的元素\nvar b = $(\'.content\');    \/\/ 获取了 class 为 content 的元素\nvar c = $(\'div\');         \/\/ 获取了 2 个 div 元素\n\n\/\/ 我们可以通过 console.log() 的方式在控制台打印输出内容\nconsole.log(a.text());      \/\/ \'my id is div1\'\nconsole.log(b.val());       \/\/ \'my class name is content\'\nconsole.log(c.length());    \/\/ 2\n<\/script>'
+				data: '\<!-- index.html --\>\n\<div id=\"div1\"\>my id is div1\<\/div\>\n\<input class=\"content\" value=\"my class name is content\" \/\>\n\<div\>I am div\<\/div\>\n\n<!-- JS -->\n<sctipt>\nvar a = $(\'#div1\');       \/\/ 获取了 id 为 div1 的元素\nvar b = $(\'.content\');    \/\/ 获取了 class 为 content 的元素\nvar c = $(\'div\');         \/\/ 获取了 2 个 div 元素\n\n\/\/ 我们可以通过 console.log() 的方式在控制台打印输出内容\nconsole.log(a.text());      \/\/ \'my id is div1\'\nconsole.log(b.val());       \/\/ \'my class name is content\'\nconsole.log(c.length());    \/\/ 2\n<\/script>'
 			},{
 				type: 'text',
 				data: '有的同学可能会问，后面的.text()那些都是什么意思？其实，对照的 HTML 文档，都可以基本猜得出来是什么意思。.text()为 jquery 封装好的获取该元素内的文本信息；.val()为获取该元素的 value 属性的值；.length() 为返回选中的元素的个数。'
