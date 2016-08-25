@@ -8,6 +8,7 @@
 <meta name="format-detection" content="telephone=no"/>
 <meta name="format-detection" content="email=no"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" name="viewport">
+<meta http-equiv="cache-control" content="no-cache" />
 
 <title>ohyang index</title>
 
@@ -15,7 +16,7 @@
 <!-- CSS -->
 <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
 <link rel="stylesheet" href="./css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="./css/course.css?v=201608260037">
+<link rel="stylesheet" type="text/css" href="./css/course.css?v=201608260050">
 
 
 </head>
@@ -58,9 +59,9 @@
         <div>
 <pre>
 <b class="qing">var</b> a <b class="red">=</b> 100;
-<b class="qing">console</b>.<b class="qing">log</b>(a);    <b class="gray">// 100</b>
+<b class="qing">console</b>.<b class="qing">log</b>(a);&nbsp;&nbsp;<b class="gray">// 100</b>
 a <b class="red">=</b> <b class="yellow">'str'</b>;
-<b class="qing">console</b>.<b class="qing">log</b>(a);    <b class="gray">// 'str'</b>
+<b class="qing">console</b>.<b class="qing">log</b>(a);&nbsp;&nbsp;<b class="gray">// 'str'</b>
 </pre>
         </div>
         <div>
@@ -104,14 +105,14 @@ a <b class="red">=</b> <b class="yellow">'str'</b>;
 
 <b class="gray">&lt;!-- JS --&gt;</b>
 &lt;<b class="red">script</b>&gt;
-<b class="qing">var</b> a <b class="red">=</b> <b class="red">$</b>(<b class="yellow">'#div1'</b>);       <b class="gray">// 获取了 id 为 div1 的元素</b>
-<b class="qing">var</b> b <b class="red">=</b> <b class="red">$</b>(<b class="yellow">'.content'</b>);    <b class="gray">// 获取了 class 为 content 的元素</b>
-<b class="qing">var</b> c <b class="red">=</b> <b class="red">$</b>(<b class="yellow">'div'</b>);         <b class="gray">// 获取了 2 个 div 元素</b>
+<b class="qing">var</b> a <b class="red">=</b> <b class="red">$</b>(<b class="yellow">'#div1'</b>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b class="gray">// 获取了 id 为 div1 的元素</b>
+<b class="qing">var</b> b <b class="red">=</b> <b class="red">$</b>(<b class="yellow">'.content'</b>);&nbsp;&nbsp;<b class="gray">// 获取了 class 为 content 的元素</b>
+<b class="qing">var</b> c <b class="red">=</b> <b class="red">$</b>(<b class="yellow">'div'</b>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b class="gray">// 获取了 2 个 div 元素</b>
 
 <b class="gray">// 我们可以通过 console.log() 的方式在控制台打印输出内容</b>
-<b class="qing">console</b>.<b class="qing">log</b>(a.<b class="qing">text</b>());      <b class="gray">// 'my id is div1'</b>
-<b class="qing">console</b>.<b class="qing">log</b>(b.<b class="qing">val</b>());       <b class="gray">// 'my class name is content'</b>
-<b class="qing">console</b>.<b class="qing">log</b>(c.<b class="qing">length</b>());    <b class="gray">// 2</b>
+<b class="qing">console</b>.<b class="qing">log</b>(a.<b class="qing">text</b>());&nbsp;&nbsp;&nbsp;&nbsp;<b class="gray">// 'my id is div1'</b>
+<b class="qing">console</b>.<b class="qing">log</b>(b.<b class="qing">val</b>());&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b class="gray">// 'my class name is content'</b>
+<b class="qing">console</b>.<b class="qing">log</b>(c.<b class="qing">length</b>());&nbsp;&nbsp;<b class="gray">// 2</b>
 &lt;<b class="red">/script</b>&gt;
 </pre>
         </div>
@@ -135,7 +136,7 @@ a <b class="red">=</b> <b class="yellow">'str'</b>;
             <p>获取这个 div 元素的文本信息：$('#one').text();    // 'this is text'</p>
         </div>
         <div>
-            <p>获取这个 div 元素的 HTML 值：$('.d-1').html();    // 'this is <b>text</b>'</p>
+            <p>获取这个 div 元素的 HTML 值：$('.d-1').html();    // 'this is &lt;b&gt;text&lt;/b&gt;'</p>
         </div>
         <div>
             <p>获取这个 div 元素的 data-id 属性：$('#one').attr('data-id');    // '15484'</p>
@@ -145,7 +146,7 @@ a <b class="red">=</b> <b class="yellow">'str'</b>;
         </div>
         <div>
 <pre>
-<b class="red">$</b>(<b class="yellow">'#one'</b>).<b class="qing">text</b>(<b class="yellow">'new text'</b>);    <b class="gray">// div 的文本信息变成 'new text'</b>
+<b class="red">$</b>(<b class="yellow">'#one'</b>).<b class="qing">text</b>(<b class="yellow">'new text'</b>);&nbsp;&nbsp;&nbsp;&nbsp;<b class="gray">// div 的文本信息变成 'new text'</b>
 <b class="red">...</b>
 </pre>
         </div>
