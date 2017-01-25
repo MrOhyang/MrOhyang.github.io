@@ -4,6 +4,11 @@
   "devDependencies": {
     "gulp": "3.9.1",
     "gulp-sass": "2.3.2",
-    "gulp-react": "3.1.0"
+    "gulp-less": "3.1.0",
+    "gulp-rename": "1.2.2",
+    "gulp-notify": "2.2.0",
+    "gulp-uglify": "2.0.0",
+    "gulp-react": "3.1.0",
+    "minifyjs": "0.2.0"
   }
 }

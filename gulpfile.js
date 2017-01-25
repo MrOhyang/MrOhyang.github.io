@@ -1,4 +1,8 @@
 var gulp = require('gulp');
+var less = require('gulp-less');
+var rename = require('gulp-rename');
+var notify = require('gulp-notify');
+var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var react = require('gulp-react');
 
@@ -25,6 +29,33 @@ gulp.task('watch_coc', function(){
 	});
 });
 // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ACoc end ■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ASaveMoney start ■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+// 编译
+gulp.task('less_savemondy', function() {
+	return gulp.src('ASaveMoney/less/main.less')
+        // .pipe(less({ compress: true }))
+        .pipe(less({ compress: false }))
+        .on('error', notify.onError({
+            title: 'Error running something',
+            message: 'Error: <%=error.message %>'
+        }))
+        .pipe(rename({ extname: '.min.css' }))
+        .pipe(gulp.dest('ASaveMoney/css/'));
+});
+// 监听 less
+gulp.task('watch_savemoney', ['less_savemondy'], function() {
+	// less watching
+    var watcher = gulp.watch('ASaveMoney/less/**/*.less', ['less_savemondy']);
+    watcher.on('change', function (event) {
+        var path = event.path.substring(
+            event.path.indexOf('ASaveMoney/less\\')
+        );
+        console.log('┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉');
+        console.log('File ' + path + ' was ' + event.type + ' bulid.');
+    });
+});
+// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ASaveMoney end ■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 gulp.task('watch', function(){
 	var watcher_arr = [];
