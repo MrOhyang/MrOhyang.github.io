@@ -2,33 +2,29 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var react = require('gulp-react');
 
-gulp.task('sass', function(){
-	return gulp.src('sass/**/*.scss')
-		.pipe(sass({
-			outputStyle: 'expanded'
-		}))
-		.pipe(gulp.dest('css/'))
-});
 
-gulp.task('react', function(){
-	return gulp.src('js/react/src/**/*.js')
-		.pipe(react())
-		.pipe(gulp.dest('js/react/build'))
-});
 
+// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ACoc start ■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+// 编译 react
 gulp.task('react_coc', function(){
 	return gulp.src('ACoc/js/react/src/**/*.js')
 		.pipe(react())
 		.pipe(gulp.dest('ACoc/js/react/build'))
 });
+// 监听 js
+gulp.task('watch_coc', function(){
+	var watcher_arr = [];
 
-gulp.task('sass_h5', function(){
-	return gulp.src('AH5/sass/**/*.scss')
-		.pipe(sass({
-			outputStyle: 'expanded'
-		}))
-		.pipe(gulp.dest('AH5/css/'))
+	// react wataching
+	watcher_arr.push(
+		gulp.watch('ACoc/js/react/src/**/*.js', ['react_coc'])
+	);
+	watcher_arr[watcher_arr.length-1].on('change', function(event){
+		var path = /ACoc\\js\\react\\src\\(?:([^\s]+))$/.exec(event.path)[1];
+		console.log('File ' + path + ' was ' + event.type + ' run [react_coc] task.');
+	});
 });
+// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ACoc end ■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 gulp.task('watch', function(){
 	var watcher_arr = [];
@@ -52,18 +48,7 @@ gulp.task('watch', function(){
 	});
 });
 
-gulp.task('watch_coc', function(){
-	var watcher_arr = [];
 
-	// react wataching
-	watcher_arr.push(
-		gulp.watch('ACoc/js/react/src/**/*.js', ['react_coc'])
-	);
-	watcher_arr[watcher_arr.length-1].on('change', function(event){
-		var path = /ACoc\\js\\react\\src\\(?:([^\s]+))$/.exec(event.path)[1];
-		console.log('File ' + path + ' was ' + event.type + ' run [react_coc] task.');
-	});
-});
 
 gulp.task('watch_h5', function(){
 	var watcher_arr = [];
