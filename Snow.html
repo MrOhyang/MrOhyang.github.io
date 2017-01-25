@@ -39,7 +39,7 @@ function init() {
     document.addEventListener("touchstart", onDocumentTouchStart, !1),
     document.addEventListener("touchmove", onDocumentTouchMove, !1),
     document.addEventListener("touchend", onDocumentTouchEnd, !1),
-    setInterval(loop, 1e3 / 30)
+    setInterval(loop, 1e3 / 60)
 }
 function onDocumentTouchStart(e) {
     1 == e.touches.length && (e.preventDefault(),
