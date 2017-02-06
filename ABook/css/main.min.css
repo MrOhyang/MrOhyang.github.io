@@ -1,0 +1,178 @@
+/* reset */
+/* Public */
+body,
+form,
+tr,
+td,
+input,
+button,
+textarea,
+ul,
+li,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+img {
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+img {
+  border: none;
+}
+ul {
+  list-style-type: none;
+}
+em {
+  font-style: normal;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+/* Variable */
+/* Class */
+/* Code */
+* {
+  font-size: 1rem;
+  /*font-family: 'Microsoft Yahei';*/
+}
+html {
+  font-size: 15px;
+}
+@media (max-width: 350px) {
+  html {
+    font-size: 14.5px;
+  }
+}
+@media (max-width: 300px) {
+  html {
+    font-size: 14px;
+  }
+}
+/* Public */
+/* Variable */
+/* 写法
+background-image: url("../images/icon.png?@{IMG_VERSION}");
+*/
+/* Public Class */
+/* 公共动画 */
+/* 公共class & 函数方法 */
+/* Class */
+.clearfix {
+  zoom: 1;
+}
+.clearfix:after {
+  content: "";
+  display: block;
+  visibility: hidden;
+  height: 0;
+  line-height: 0;
+  font-size: 0;
+  clear: both;
+}
+.hide {
+  display: none !important;
+}
+.un-visible {
+  visibility: hidden;
+}
+/* Code */
+/* Variable */
+/* Code */
+.d-header {
+  position: fixed;
+  top: 0;
+  padding: 0 2rem;
+  width: 100%;
+  height: 4rem;
+  line-height: 4rem;
+  background-color: #FFF;
+  border-bottom: 1px #EEE solid;
+  box-sizing: border-box;
+}
+.main-cont {
+  position: relative;
+  margin-top: 4rem;
+  padding: 0 2rem;
+  padding-left: 22rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.main-cont .left-bar {
+  position: fixed;
+  top: 4rem;
+  left: 2rem;
+  width: 18rem;
+  height: 100%;
+}
+.main-cont .left-bar h1,
+.main-cont .left-bar h2,
+.main-cont .left-bar h3 {
+  line-height: 1.8rem;
+}
+.main-cont .left-bar h1 a,
+.main-cont .left-bar h2 a,
+.main-cont .left-bar h3 a {
+  font-size: inherit;
+  color: #000;
+}
+.main-cont .left-bar h1 {
+  font-size: 1.2rem;
+}
+.main-cont .left-bar h2 {
+  margin-left: 1.2rem;
+  font-size: 1rem;
+}
+.main-cont .left-bar h3 {
+  margin-left: 2.4rem;
+  font-size: 0.9rem;
+}
+.main-cont .right-cont {
+  width: 80%;
+}
+.main-cont .right-cont h1,
+.main-cont .right-cont h2,
+.main-cont .right-cont h3 {
+  /*line-height: 2rem;*/
+  padding: 0.4rem 0;
+}
+.main-cont .right-cont h1 a,
+.main-cont .right-cont h2 a,
+.main-cont .right-cont h3 a {
+  font-size: inherit;
+  color: #000;
+}
+.main-cont .right-cont h1 {
+  font-size: 2rem;
+}
+.main-cont .right-cont h2 {
+  font-size: 1.5rem;
+}
+.main-cont .right-cont p {
+  padding: 0.4rem 0;
+  line-height: 1.6rem;
+  font-size: 1rem;
+  /*text-indent: 2rem;*/
+}
+.main-cont .right-cont p.title {
+  font-size: 1.2rem;
+  /*text-indent: 0;*/
+}
+.main-cont .right-cont pre {
+  margin: 0.2rem 0;
+  border-radius: 0.2rem;
+}

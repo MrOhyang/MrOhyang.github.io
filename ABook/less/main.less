@@ -1,0 +1,91 @@
+/* reset */
+@import 'reset.less';
+@import 'resize_font_size.less';
+
+/* Public */
+
+/* Variable */
+@IMG_VERSION: 2016120710;  // 图片版本号
+/* 写法
+background-image: url("../images/icon.png?@{IMG_VERSION}");
+*/
+
+/* Public Class */
+/* 公共动画 */
+@import '_animation.less';
+/* 公共class & 函数方法 */
+@import 'public_class.less';
+
+/* Code */
+// header 顶部
+@import 'header.less';
+
+// main-cont
+.main-cont{
+    position: relative;
+    margin-top: @HEADER_H;
+    padding: 0 2rem;
+    padding-left: 22rem;
+    width: 100%;
+    box-sizing: border-box;
+    // 左侧导航
+    .left-bar{
+        position: fixed;
+        top: @HEADER_H;
+        left: 2rem;
+        width: 22-2*2rem;
+        height: 100%;
+        h1, h2, h3{
+            line-height: 1.8rem;
+            a{
+                font-size: inherit;
+                color: #000;
+            }
+        }
+        h1{
+            font-size: 1.2rem;
+        }
+        h2{
+            margin-left: 1.2rem;
+            font-size: 1rem;
+        }
+        h3{
+            margin-left: 1.2*2rem;
+            font-size: 0.9rem;
+        }
+    }
+    // 右侧主体内容
+    .right-cont{
+        width: 80%;
+        h1, h2, h3{
+            /*line-height: 2rem;*/
+            padding: 0.4rem 0;
+            a{
+                font-size: inherit;
+                color: #000;
+            }
+        }
+        h1{
+            font-size: 2rem;
+        }
+        h2{
+            font-size: 1.5rem;
+        }
+        p{
+            padding: 0.4rem 0;
+            line-height: 1.6rem;
+            font-size: 1rem;
+            /*text-indent: 2rem;*/
+        }
+        p.title{
+            font-size: 1.2rem;
+            /*text-indent: 0;*/
+        }
+        pre{
+            margin: 0.2rem 0;
+            border-radius: 0.2rem;
+            code{
+            }
+        }
+    }
+}

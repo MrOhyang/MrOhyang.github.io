@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no"/>
+<meta name="format-detection" content="email=no"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" name="viewport">
+
+<title>demo</title>
+
+
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="css/monokai.css" media="screen">
+<link rel="stylesheet" type="text/css" href="css/main.min.css">
+
+
+</head>
+<body>
+
+<!-- header -->
+<div class="d-header">
+    中文
+</div>
+
+<!-- main cont -->
+<div class="main-cont">
+    <div class="left-bar">
+        <!-- 此缩进代表 语义上的层级 -->
+        <h1><a href="#CSS方面">CSS方面</a></h1>
+
+        <h1><a href="#JS方面">JS方面</a></h1>
+            <h2><a href="#多行字符串">多行字符串</a></h2>
+            <h2><a href="#正则表达式">正则表达式</a></h2>
+            <h2><a href="#canvas">canvas</a></h2>
+                <h3><a href="#图片生成思路">图片生成思路</a></h3>
+
+        <h1><a href="#m站兼容性方面">m站兼容性方面</a></h1>
+    </div>
+    <div class="right-cont">
+        <include src="html/js.html"></include>
+        <iframe frameborder=0 width=100% height="auto" marginheight=0 marginwidth=0 scrolling=no src="html/js2.html"></iframe>
+    </div>
+</div>
+
+
+<!-- JS -->
+<script src="js/lib/rainbow.js"></script>
+<script src="js/lib/language/generic.js"></script>
+<script src="js/lib/language/javascript.js"></script>
+
+<script src="js/require.js"></script>
+<script src="js/require_conf.js"></script>
+<script>
+require(['ctrlIndex'], function(ctrlIndex) {
+    ctrlIndex.init();
+});
+</script>
+
+
+</body>
+</html>
