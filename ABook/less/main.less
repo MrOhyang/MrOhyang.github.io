@@ -26,32 +26,39 @@ background-image: url("../images/icon.png?@{IMG_VERSION}");
     margin-top: @HEADER_H;
     padding: 0 2rem;
     padding-left: 22rem;
+    padding-bottom: 4rem;
     width: 100%;
     box-sizing: border-box;
     // 左侧导航
-    .left-bar{
+    .d-left-bar{
         position: fixed;
-        top: @HEADER_H;
+        top: 0;
         left: 2rem;
+        padding-top: @HEADER_H;
         width: 22-2*2rem;
         height: 100%;
-        h1, h2, h3{
-            line-height: 1.8rem;
-            a{
-                font-size: inherit;
-                color: #000;
+        box-sizing: border-box;
+        .left-bar{
+            overflow-y: scroll;
+            height: 100%;
+            h1, h2, h3{
+                line-height: 1.8rem;
+                a{
+                    font-size: inherit;
+                    color: #000;
+                }
             }
-        }
-        h1{
-            font-size: 1.2rem;
-        }
-        h2{
-            margin-left: 1.2rem;
-            font-size: 1rem;
-        }
-        h3{
-            margin-left: 1.2*2rem;
-            font-size: 0.9rem;
+            h1{
+                font-size: 1.2rem;
+            }
+            h2{
+                margin-left: 1.2rem;
+                font-size: 1rem;
+            }
+            h3{
+                margin-left: 1.2*2rem;
+                font-size: 0.9rem;
+            }
         }
     }
     // 右侧主体内容
@@ -89,3 +96,5 @@ background-image: url("../images/icon.png?@{IMG_VERSION}");
         }
     }
 }
+
+@import 'main_hack.less';

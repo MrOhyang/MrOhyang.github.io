@@ -103,41 +103,49 @@ background-image: url("../images/icon.png?@{IMG_VERSION}");
   background-color: #FFF;
   border-bottom: 1px #EEE solid;
   box-sizing: border-box;
+  z-index: 100;
 }
 .main-cont {
   position: relative;
   margin-top: 4rem;
   padding: 0 2rem;
   padding-left: 22rem;
+  padding-bottom: 4rem;
   width: 100%;
   box-sizing: border-box;
 }
-.main-cont .left-bar {
+.main-cont .d-left-bar {
   position: fixed;
-  top: 4rem;
+  top: 0;
   left: 2rem;
+  padding-top: 4rem;
   width: 18rem;
   height: 100%;
+  box-sizing: border-box;
 }
-.main-cont .left-bar h1,
-.main-cont .left-bar h2,
-.main-cont .left-bar h3 {
+.main-cont .d-left-bar .left-bar {
+  overflow-y: scroll;
+  height: 100%;
+}
+.main-cont .d-left-bar .left-bar h1,
+.main-cont .d-left-bar .left-bar h2,
+.main-cont .d-left-bar .left-bar h3 {
   line-height: 1.8rem;
 }
-.main-cont .left-bar h1 a,
-.main-cont .left-bar h2 a,
-.main-cont .left-bar h3 a {
+.main-cont .d-left-bar .left-bar h1 a,
+.main-cont .d-left-bar .left-bar h2 a,
+.main-cont .d-left-bar .left-bar h3 a {
   font-size: inherit;
   color: #000;
 }
-.main-cont .left-bar h1 {
+.main-cont .d-left-bar .left-bar h1 {
   font-size: 1.2rem;
 }
-.main-cont .left-bar h2 {
+.main-cont .d-left-bar .left-bar h2 {
   margin-left: 1.2rem;
   font-size: 1rem;
 }
-.main-cont .left-bar h3 {
+.main-cont .d-left-bar .left-bar h3 {
   margin-left: 2.4rem;
   font-size: 0.9rem;
 }
@@ -175,4 +183,16 @@ background-image: url("../images/icon.png?@{IMG_VERSION}");
 .main-cont .right-cont pre {
   margin: 0.2rem 0;
   border-radius: 0.2rem;
+}
+/* Code */
+@media (max-width: 900px) {
+  .main-cont {
+    padding-left: 2rem;
+  }
+  .main-cont .d-left-bar {
+    display: none;
+  }
+  .main-cont .right-cont {
+    width: 100%;
+  }
 }
