@@ -6,7 +6,7 @@ var Handler = Laya.Handler;
 var WebGL   = Laya.WebGL;
 
 // 是否强制横屏
-var isHorizontal = false,
+var isHorizontal = true,
     win_w = isHorizontal ? Browser.clientHeight : Browser.clientWidth,
     win_h = isHorizontal ? Browser.clientWidth : Browser.clientHeight;
 
