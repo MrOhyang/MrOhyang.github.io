@@ -6,7 +6,7 @@ var Handler = Laya.Handler;
 var WebGL   = Laya.WebGL;
 
 // 是否强制横屏
-var isHorizontal = true,
+var isHorizontal = false,
     win_w = isHorizontal ? Browser.clientHeight : Browser.clientWidth,
     win_h = isHorizontal ? Browser.clientWidth : Browser.clientHeight;
 
@@ -19,7 +19,8 @@ horse_list.push(initHorse(0, 40));
 horse_list.push(initHorse(0, 140));
 horse_list.push(initHorse(0, 240));
 
-startRun();  // 开始赛马
+// 点击屏幕开始赛马
+Laya.stage.on(Laya.Event.CLICK, this, startRun);
 
 // ---------- 函数定义 start ----------
 
