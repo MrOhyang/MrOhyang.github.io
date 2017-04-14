@@ -5,6 +5,11 @@ var Browser = Laya.Browser;
 var Handler = Laya.Handler;
 var WebGL   = Laya.WebGL;
 
+// 是否强制横屏
+var isHorizontal = true,
+    win_w = isHorizontal ? Browser.clientHeight : Browser.clientWidth,
+    win_h = isHorizontal ? Browser.clientWidth : Browser.clientHeight;
+
 init();  // Laya 环境 初始化
 
 var horse_list = [];
@@ -14,16 +19,19 @@ horse_list.push(initHorse(0, 40));
 horse_list.push(initHorse(0, 140));
 horse_list.push(initHorse(0, 240));
 
-Laya.timer.frameLoop(1, this, run);  // 开始赛马
+startRun();  // 开始赛马
+
+// ---------- 函数定义 start ----------
 
 // Laya 环境 初始化
 function init() {
-    Laya.init(Browser.clientHeight, Browser.clientWidth, WebGL);
+    console.log(win_w, win_h);
+    Laya.init(win_w, win_h, WebGL);
     Laya.stage.alignV = Stage.ALIGN_MIDDLE;
     Laya.stage.alignH = Stage.ALIGN_CENTER;
 
     Laya.stage.scaleMode = "showall";
-    Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;
+    if (isHorizontal) Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;
     Laya.stage.bgColor = "#eee";
 }
 
@@ -37,6 +45,7 @@ function initHorse(_x, _y) {
         xuan: 0,
         x_add: ~~(Math.random() * 3) + 1,
         du_add: ~~(Math.random() * 11) + 5,
+        is_finish: false,  // 是否跑到了终点
         ape: new Sprite()
     };
 
@@ -50,25 +59,40 @@ function initHorse(_x, _y) {
 }
 
 // 开始赛马
+function startRun() {
+    Laya.timer.frameLoop(1, this, run);  // 开始赛马
+}
+
+// 赛马
 function run() {
     clearFlag = false;
     horse_list.forEach(function(horse, i) {
-        horse.x += horse.x_add;
-        horse.y -= 3 * Math.sin(horse.du * 0.0174);
-        horse.du += horse.du_add;
+        if (!horse.is_finish) {
+            horse.x += horse.x_add;
+            horse.y -= 3 * Math.sin(horse.du * 0.0174);
+            horse.du += horse.du_add;
 
-        // 判断是否结束
-        if (horse.x >= Browser.clientHeight - 80) {
-            clearFlag = true;
-            horse.x = Browser.clientHeight - 80;
+            // 判断是否结束
+            if (horse.x >= win_w - 80) {
+                clearFlag = true;
+                horse.x = win_w - 80;
+                horse.is_finish = true;
+            }
+
+            // 动画
+            horse.ape.rotation = 26 * Math.sin(horse.du * 0.0174);
+            // horse.ape.rotation = 26 * Math.cos(horse.du / 2 * 0.0174);
+            horse.ape.pos(horse.x, horse.y);
         }
-
-        // 动画
-        horse.ape.rotation = 26 * Math.sin(horse.du * 0.0174);
-        horse.ape.pos(horse.x, horse.y);
     });
 
     if (clearFlag) {
-        Laya.timer.clear(this, run);
+        var temp = horse_list.filter(function(horse) {
+            return horse.is_finish == false;
+        });
+
+        if (temp.length <= 0) {
+            Laya.timer.clear(this, run);
+        }
     }
 }
