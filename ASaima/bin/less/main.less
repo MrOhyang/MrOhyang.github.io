@@ -1,0 +1,43 @@
+/* reset */
+@import 'reset.less';
+@import 'resize_font_size.less';
+
+/* Public */
+
+/* Variable */
+@IMG_VERSION: 2017041601;  // 图片版本号
+/* 写法
+background-image: url("../images/icon.png?@{IMG_VERSION}");
+*/
+
+/* Public Class */
+/* 公共class & 函数方法 */
+@import 'public_class.less';
+
+/* Code */
+.header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 11%;
+    z-index: 10;
+    ul{
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        li{
+            display: inline;
+            float: left;
+            height: inherit;
+            h1{
+                font-size: 1.1rem;
+                color: #f00;
+            }
+            h2{
+                font-size: 0.7rem;
+            }
+        }
+    }
+}

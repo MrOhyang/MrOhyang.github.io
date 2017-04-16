@@ -26,7 +26,6 @@ Laya.stage.on(Laya.Event.CLICK, this, startRun);
 
 // Laya 环境 初始化
 function init() {
-    console.log(win_w, win_h);
     Laya.init(win_w, win_h, WebGL);
     Laya.stage.alignV = Stage.ALIGN_MIDDLE;
     Laya.stage.alignH = Stage.ALIGN_CENTER;
