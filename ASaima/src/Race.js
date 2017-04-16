@@ -73,8 +73,13 @@ function createCars() {
         var obj = {
             x: 16,
             y: startMap.y + win_h * 0.165 + i * win_h * 0.056,
+            speed: [],
             ape: new Sprite()
         };
+        obj.speed.push(Math.random() * 0.002 * win_w);
+        for (var j = 0; j < 2; j++) {
+            obj.speed.push((Math.random() * 0.002 - 0.001) * win_w);
+        }
         var img_src = 'images/car/bjsc_car_' + (i + 1) + '.png';
 
         car_list.push(obj);
@@ -90,12 +95,12 @@ function createCars() {
 
 // 开始
 function startRun() {
-    console.log('test');
-    Laya.timer.frameLoop(1, this, startMapRun);  // 起点地图缓动
-    Laya.timer.frameLoop(1, this, onMapRun);     // 中间地图循环缓动
+    Laya.timer.frameLoop(1, this, startMapRun);  // 起点地图动画
+    Laya.timer.frameLoop(1, this, onMapRun);     // 中间地图循环动画
+    Laya.timer.frameLoop(1, this, carRun);       // 车辆动画
 }
 
-// 起点地图缓动
+// 起点地图动画
 function startMapRun() {
     startMap.x -= startMap.speed;
     startMap.ape.pos(startMap.x, startMap.y);
@@ -105,13 +110,28 @@ function startMapRun() {
     }
 }
 
-// 中间地图循环缓动
+var on_map_count = 0;
+// 中间地图循环动画
 function onMapRun() {
+
     onMap.x -= onMap.speed;
     if (onMap.x <= -win_w) {
+        console.log('第' + ++on_map_count + '屏结束');
+        if (on_map_count == 3) {
+            Laya.timer.clear(this, onMapRun);
+            Laya.timer.clear(this, carRun);
+        }
         onMap.x += win_w;
     }
     onMap.ape.pos(onMap.x, onMap.y);
+}
+
+// 车辆动画
+function carRun() {
+    car_list.forEach(function(car) {
+        car.x += car.speed[on_map_count];
+        car.ape.pos(car.x, car.y);
+    });
 }
 
 
