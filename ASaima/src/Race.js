@@ -84,15 +84,15 @@ function initTitle() {
     // number
     for (var i = 0; i < 10; i++) {
         var obj = {
-            wh: 0.08 * win_h,
-            y: 0.016 * win_h,
+            wh: 0.07 * win_h,
+            y: 0.018 * win_h,
             ape: new Sprite()
         };
         var img_src = 'images/number/bjsc_card_' + (i + 1) + '.png';
 
-        number_posi.push(0.28 * win_w + 0.09 * win_h * i);
+        number_posi.push(0.30 * win_w + 0.08 * win_h * i);
         obj.ape.loadImage(img_src, 0, 0, obj.wh, obj.wh);
-        obj.ape.pos(number_posi[i], 0.016 * win_h);
+        obj.ape.pos(number_posi[i], obj.y);
         number.push(obj);
         Laya.stage.addChild(obj.ape);
     }
@@ -170,7 +170,7 @@ function initBottom() {
 
         p2.x = x;
         p2.y = 0.06 * win_h;
-        p2.fontSize = 14;
+        p2.fontSize = 13;
         p2.text = text;
         p2.color = '#fff';
         btn.addChild(p2);
