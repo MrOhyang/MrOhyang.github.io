@@ -238,6 +238,7 @@ function createCars() {
         obj.w = win_w * 0.09;
         obj.h = obj.w * 65 / 180;
         obj.number = i;
+        obj.is_finish = false;
         obj.ape.loadImage(img_src, 0, 0, obj.w, obj.h);
         obj.ape.pos(obj.x, obj.y);
         Laya.stage.addChild(obj.ape);
@@ -273,6 +274,7 @@ function onMapRun() {
         if (on_map_count == 3) {
             Laya.timer.clear(this, onMapRun);
             Laya.timer.clear(this, carRun);
+            Laya.timer.clear(this, sortCarRank);
         }
         onMap.x += win_w;
     }
@@ -288,22 +290,46 @@ function endMapRun() {
 
 // 车辆动画
 function carRun() {
-    car_list.forEach(function(car) {
-        car.x += car.speed[on_map_count];
-        car.ape.pos(car.x, car.y);
-    });
+    if (on_map_count >= 1) {
+        for (var i = 0; i < car_list.length; i++) {
+            car_list[i].x += car_list[i].speed[on_map_count];
+            car_list[i].ape.pos(car_list[i].x, car_list[i].y);
+            if (car_list[i].x + car_list[i].w >= endMap.x) {
+                if (!car_list[i].is_finish) {
+                    sortCarRank();
+                    car_list[i].is_finish = true;
+                }
+            } else {
+                i++;
+                break;
+            }
+        }
+        for (; i < car_list.length; i++) {
+            car_list[i].x += car_list[i].speed[on_map_count];
+            car_list[i].ape.pos(car_list[i].x, car_list[i].y);
+        }
+    } else {
+        car_list.forEach(function(car) {
+            car.x += car.speed[on_map_count];
+            car.ape.pos(car.x, car.y);
+        });
+    }
 }
 
 // 排名号码
 function sortCarRank() {
-    var number_posi = title_obj.number_posi,
+    var car_list_temp = null,
+        number_posi = title_obj.number_posi,
         number = title_obj.number;
 
     car_list.sort(function(a, b) {
         return b.x - a.x;
     });
-    car_list.forEach(function(car, i) {
-        number[car.number].ape.pos(number_posi[i], number[0].y);
+    car_list_temp = car_list.filter(function(car) {
+        return !car.is_finish;
+    });
+    car_list_temp.forEach(function(car, i) {
+        number[car.number].ape.pos(number_posi[10 - car_list_temp.length + i], number[0].y);
     });
 }
 
