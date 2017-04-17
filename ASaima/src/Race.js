@@ -219,30 +219,62 @@ function createMap() {
 
 // 车辆 初始化
 function createCars() {
+    var number_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    // var number_list = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+
     for (var i = 0; i < 10; i++) {
         var obj = {
+            s: [],
             x: 16,
-            y: startMap.y + win_h * 0.165 + i * win_h * 0.056,
+            y: startMap.y + win_h * 0.193 + i * win_h * 0.056,
             speed: [],
             ape: new Sprite()
         };
-        obj.speed.push(Math.random() * 0.002 * win_w);
-        for (var j = 0; j < 2; j++) {
-            obj.speed.push((Math.random() * 0.002 - 0.001) * win_w);
-        }
-        var img_src = 'images/car/bjsc_car_' + (i + 1) + '.png';
+        var s1 = s2 = s3 = 0;
 
-        car_list.push(obj);
-        // obj.h = win_h * 0.06;
-        // obj.w = obj.h * 180 / 65;
+        obj.s.push(1 + 0.15 + Math.random() * (0.4 - 0.13));
+        obj.s.push(2 - obj.s[0] + 0.1 + Math.random() * (0.5 - 0.1));
+        obj.s.push(3 - obj.s[0] - obj.s[1] + 0.2 + Math.random() * (0.6 - 0.2));
+
+        obj.speed.push((obj.s[0] / 250 - 0.004) * win_w);
+        obj.speed.push((obj.s[1] / 250 - 0.004) * win_w);
+        obj.speed.push((obj.s[2] / 250 - 0.004) * win_w);
+
         obj.w = win_w * 0.09;
         obj.h = obj.w * 65 / 180;
-        obj.number = i;
         obj.is_finish = false;
-        obj.ape.loadImage(img_src, 0, 0, obj.w, obj.h);
-        obj.ape.pos(obj.x, obj.y);
-        Laya.stage.addChild(obj.ape);
+
+        var temp_s = ((3 - obj.s[0] - obj.s[1] + 0.129) * win_w - obj.w - obj.x),
+            temp_v = (obj.s[2] / 250 * win_w);
+
+        obj.time = 0;
+        for (; temp_s > 0; temp_s -= temp_v) {
+            obj.time++;
+        }
+        obj.time -= (temp_s * 0.001);
+        car_list.push(obj);
     }
+    car_list.sort(function(a, b) {
+        return a.time - b.time;
+    });
+    // car_list.forEach(function(car) {
+    //     console.log(car.index);
+    // });
+    number_list.forEach(function(number, i) {
+        car_list[i].number = number - 1;
+    });
+    car_list.sort(function(a, b) {
+        return a.number - b.number;
+    });
+    car_list.forEach(function(car) {
+        // console.log(car.time, car.number);
+        var img_src = 'images/car/bjsc_car_' + (car.number + 1) + '.png';
+
+        car.y = startMap.y + win_h * 0.193 + car.number * win_h * 0.056;
+        car.ape.loadImage(img_src, 0, -car.h / 2, car.w, car.h);
+        car.ape.pos(car.x, car.y);
+        Laya.stage.addChild(car.ape);
+    });
 }
 
 // 开始
@@ -272,6 +304,10 @@ function onMapRun() {
             Laya.timer.frameLoop(1, this, endMapRun);
         }
         if (on_map_count == 3) {
+            // console.log('---------');
+            // car_list.forEach(function(car) {
+            //     console.log(car.number, car.x);
+            // });
             Laya.timer.clear(this, onMapRun);
             Laya.timer.clear(this, carRun);
             Laya.timer.clear(this, sortCarRank);
@@ -297,6 +333,7 @@ function carRun() {
             if (car_list[i].x + car_list[i].w >= endMap.x) {
                 if (!car_list[i].is_finish) {
                     sortCarRank();
+                    car_list[i].speed[car_list[i].speed.length - 1] = 0;
                     car_list[i].is_finish = true;
                 }
             } else {
