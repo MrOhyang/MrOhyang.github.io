@@ -244,22 +244,26 @@ function createCars() {
         obj.h = obj.w * 65 / 180;
         obj.is_finish = false;
 
-        var temp_s = ((3 - obj.s[0] - obj.s[1] + 0.129) * win_w - obj.w - obj.x),
-            temp_v = (obj.s[2] / 250 * win_w);
-
-        obj.time = 0;
-        for (; temp_s > 0; temp_s -= temp_v) {
-            obj.time++;
+        var temp_x = obj.x;
+            temp_end_x = endMap.x;
+        for (var j = 0; j < 250; j++) temp_x += obj.speed[0];
+        for (var j = 0; j < 250; j++) temp_x += obj.speed[1];
+        for (var j = 0; j < 250; j++) {
+            temp_x += obj.speed[2];
+            if (j >= 2) {
+                temp_end_x -= endMap.speed;
+            }
+            if (temp_x + obj.w >= temp_end_x) {
+                obj.time = -temp_x;
+                break;
+            }
         }
-        obj.time -= (temp_s * 0.001);
+
         car_list.push(obj);
     }
     car_list.sort(function(a, b) {
         return a.time - b.time;
     });
-    // car_list.forEach(function(car) {
-    //     console.log(car.index);
-    // });
     number_list.forEach(function(number, i) {
         car_list[i].number = number - 1;
     });
@@ -267,7 +271,6 @@ function createCars() {
         return a.number - b.number;
     });
     car_list.forEach(function(car) {
-        // console.log(car.time, car.number);
         var img_src = 'images/car/bjsc_car_' + (car.number + 1) + '.png';
 
         car.y = startMap.y + win_h * 0.193 + car.number * win_h * 0.056;
@@ -279,9 +282,9 @@ function createCars() {
 
 // 开始
 function startRun() {
+    Laya.timer.frameLoop(1, this, carRun);       // 车辆动画
     Laya.timer.frameLoop(1, this, startMapRun);  // 起点地图动画
     Laya.timer.frameLoop(1, this, onMapRun);     // 中间地图循环动画
-    Laya.timer.frameLoop(1, this, carRun);       // 车辆动画
     Laya.timer.loop(500, this, sortCarRank);     // 排名号码
 }
 
@@ -306,7 +309,7 @@ function onMapRun() {
         if (on_map_count == 3) {
             // console.log('---------');
             // car_list.forEach(function(car) {
-            //     console.log(car.number, car.x);
+            //     console.log(car.number, car.x, car.time);
             // });
             Laya.timer.clear(this, onMapRun);
             Laya.timer.clear(this, carRun);
