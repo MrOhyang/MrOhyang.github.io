@@ -9,6 +9,8 @@ var Handler = Laya.Handler;
 var Stat = Laya.Stat;
 var WebGL = Laya.WebGL;
 
+window.ohyang = this;
+
 // 是否强制横屏
 var isHorizontal = true,
     win_w = isHorizontal ? Browser.clientHeight : Browser.clientWidth,
@@ -21,6 +23,8 @@ var title_obj = {  // 首页头部变量
     'number_posi': [],  // 号码的 x 位置
     'number': []        // 排名号码
 };
+
+var startNumber = {};  // 开场的数字变化
 
 var startMap = {},   // 地图变量
     onMap = {},      // 中间地图
@@ -36,9 +40,11 @@ initTitle();   // 绘制头部 title
 initBottom();  // 绘制底部
 createMap();   // 创建地图
 createCars();  // 创建车辆
+initStartNumber();  // 开场的数字变化
 
 // 点击屏幕开始比赛
-Laya.stage.once(Laya.Event.CLICK, this, startRun);
+// Laya.stage.once(Laya.Event.CLICK, this, startRun);
+Laya.stage.once(Laya.Event.CLICK, this, startNumberRun);
 
 // Laya 环境 初始化
 function init() {
@@ -49,6 +55,31 @@ function init() {
     Laya.stage.scaleMode = "showall";
     if (isHorizontal) Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;
     Laya.stage.bgColor = "#dbd030";
+}
+
+// 开场的数字变化
+function initStartNumber() {
+    startNumber.ape = new Sprite();
+    Laya.stage.addChild(startNumber.ape);
+}
+
+// 开场的数字变化动画
+function startNumberRun() {
+    for (var i = 3; i >= 0; i--) {
+        ;(function(i) {
+            window.setTimeout(function() {
+                var img_src = 'images/threeSecoond_' + i + '.png';
+
+                startNumber.ape.graphics.clear();
+                startNumber.ape.loadImage(img_src, -491/2, -119/2, 491, 119);
+                startNumber.ape.pos(win_w / 2, win_h / 2);
+            }, (3 - i) * 1000);
+        })(i);
+    }
+    window.setTimeout(function() {
+        Laya.stage.removeChild(startNumber.ape);
+        startRun();
+    }, 4000);
 }
 
 // 绘制头部 title
@@ -192,6 +223,7 @@ function createMap() {
     endMap.y = 0.286 * win_h;
     endMap.h = 0.557 * win_h;
     endMap.w = endMap.h * 36 / 417;
+    endMap.speed = 0;
 
     numberMap.h = 0.532 * win_h;
     numberMap.w = numberMap.h * 47 / 603;
@@ -250,9 +282,9 @@ function createCars() {
         for (var j = 0; j < 250; j++) temp_x += obj.speed[1];
         for (var j = 0; j < 250; j++) {
             temp_x += obj.speed[2];
-            if (j >= 2) {
-                temp_end_x -= endMap.speed;
-            }
+            // if (j >= 2) {
+                temp_end_x -= (0.004 * win_w);
+            // }
             if (temp_x + obj.w >= temp_end_x) {
                 obj.time = -temp_x;
                 break;
@@ -285,6 +317,7 @@ function startRun() {
     Laya.timer.frameLoop(1, this, carRun);       // 车辆动画
     Laya.timer.frameLoop(1, this, startMapRun);  // 起点地图动画
     Laya.timer.frameLoop(1, this, onMapRun);     // 中间地图循环动画
+    Laya.timer.frameLoop(1, this, endMapRun);    // 终点地图动画
     Laya.timer.loop(500, this, sortCarRank);     // 排名号码
 }
 
@@ -304,13 +337,14 @@ function onMapRun() {
     if (onMap.x <= -win_w) {
         console.log('第' + ++on_map_count + '屏结束');
         if (on_map_count == 2) {
-            Laya.timer.frameLoop(1, this, endMapRun);
+            endMap.speed = 0.004 * win_w;
+            // Laya.timer.frameLoop(1, this, endMapRun);
         }
         if (on_map_count == 3) {
-            // console.log('---------');
-            // car_list.forEach(function(car) {
-            //     console.log(car.number, car.x, car.time);
-            // });
+            console.log('---------');
+            car_list.forEach(function(car) {
+                console.log(car.number, car.x, car.time);
+            });
             Laya.timer.clear(this, onMapRun);
             Laya.timer.clear(this, carRun);
             Laya.timer.clear(this, sortCarRank);
