@@ -44,7 +44,8 @@ initStartNumber();  // 开场的数字变化
 
 // 点击屏幕开始比赛
 // Laya.stage.once(Laya.Event.CLICK, this, startRun);
-Laya.stage.once(Laya.Event.CLICK, this, startNumberRun);
+startRun();
+// Laya.stage.once(Laya.Event.CLICK, this, startNumberRun);
 
 // Laya 环境 初始化
 function init() {
@@ -348,6 +349,7 @@ function onMapRun() {
             Laya.timer.clear(this, onMapRun);
             Laya.timer.clear(this, carRun);
             Laya.timer.clear(this, sortCarRank);
+            errorReport();  // 错误判断与收集
         }
         onMap.x += win_w;
     }
@@ -405,6 +407,61 @@ function sortCarRank() {
     car_list_temp.forEach(function(car, i) {
         number[car.number].ape.pos(number_posi[10 - car_list_temp.length + i], number[0].y);
     });
+}
+
+// 错误收集
+function errorReport() {
+    var err_num = 0;
+
+    car_list.forEach(function(car) {
+        if (-car.x != car.time) {
+            err_num++;
+        }
+    });
+
+    err_data = localStorage.getItem('err_data');
+    if (!err_data) {
+        err_data = {
+            'run_count': 0,
+            'err_count': 0,
+            'rank_err_count': 0,
+            'rank_err_arr': [],
+            'data': {}
+        };
+    } else {
+        err_data = JSON.parse(err_data);
+    }
+    err_data.run_count++;
+    if (err_num > 0) {
+        err_data.err_count++;
+        if (!err_data.data['' + err_num]) {
+            err_data.data['' + err_num] = 1;
+        } else {
+            err_data.data['' + err_num]++;
+        }
+    }
+    for (var i = 0; i < car_list.length; i++) {
+        if (car_list[i].number != i) {
+            err_data.rank_err_count++;
+            var str = [];
+
+            car_list.forEach(function(car) {
+                str.push(car.number);
+            });
+            err_data.rank_err_arr.push(str.join(','));
+            break;
+        }
+    }
+    localStorage.setItem('err_data', JSON.stringify(err_data));
+    if (err_data.run_count < 100) {
+        errReload();
+    }
+}
+
+function errReload() {
+    window.setTimeout(function() {
+        window.location.reload();
+    }, 200);
 }
 
 
