@@ -44,8 +44,8 @@ initStartNumber();  // 开场的数字变化
 
 // 点击屏幕开始比赛
 // Laya.stage.once(Laya.Event.CLICK, this, startRun);
-startRun();
-// Laya.stage.once(Laya.Event.CLICK, this, startNumberRun);
+// startRun();
+Laya.stage.once(Laya.Event.CLICK, this, startNumberRun);
 
 // Laya 环境 初始化
 function init() {
@@ -259,6 +259,8 @@ function createCars() {
         var obj = {
             s: [],
             x: 16,
+            his_x: [],
+            zhen: 0,
             y: startMap.y + win_h * 0.193 + i * win_h * 0.056,
             speed: [],
             ape: new Sprite()
@@ -277,6 +279,7 @@ function createCars() {
         obj.h = obj.w * 65 / 180;
         obj.is_finish = false;
 
+        /*  // 方法1
         var temp_x = obj.x;
             temp_end_x = endMap.x;
         for (var j = 0; j < 250; j++) temp_x += obj.speed[0];
@@ -286,6 +289,28 @@ function createCars() {
             // if (j >= 2) {
                 temp_end_x -= (0.004 * win_w);
             // }
+            if (temp_x + obj.w >= temp_end_x) {
+                obj.time = -temp_x;
+                break;
+            }
+        }*/
+
+        // 方法2
+        var temp_x = obj.x;
+            temp_end_x = endMap.x;
+        obj.his_x.push(temp_x);
+        for (var j = 0; j < 250; j++) {
+            temp_x += obj.speed[0];
+            obj.his_x.push(temp_x);
+        }
+        for (var j = 0; j < 250; j++) {
+            temp_x += obj.speed[1];
+            obj.his_x.push(temp_x);
+        }
+        for (var j = 0; j < 250; j++) {
+            temp_x += obj.speed[2];
+            obj.his_x.push(temp_x);
+            temp_end_x -= (0.004 * win_w);
             if (temp_x + obj.w >= temp_end_x) {
                 obj.time = -temp_x;
                 break;
@@ -365,7 +390,12 @@ function endMapRun() {
 
 // 车辆动画
 function carRun() {
-    if (on_map_count >= 1) {
+    car_list.forEach(function(car) {
+        if (!car.his_x[car.zhen]) return ;
+        car.x = car.his_x[car.zhen++];
+        car.ape.pos(car.x, car.y);
+    });
+    /*if (on_map_count >= 1) {
         for (var i = 0; i < car_list.length; i++) {
             car_list[i].x += car_list[i].speed[on_map_count];
             car_list[i].ape.pos(car_list[i].x, car_list[i].y);
@@ -389,7 +419,7 @@ function carRun() {
             car.x += car.speed[on_map_count];
             car.ape.pos(car.x, car.y);
         });
-    }
+    }*/
 }
 
 // 排名号码
@@ -453,9 +483,9 @@ function errorReport() {
         }
     }
     localStorage.setItem('err_data', JSON.stringify(err_data));
-    if (err_data.run_count < 100) {
-        errReload();
-    }
+    // if (err_data.run_count < 100) {
+    //     errReload();
+    // }
 }
 
 function errReload() {
