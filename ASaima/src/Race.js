@@ -35,17 +35,22 @@ var on_map_count = 0;  // 地图整页的数量
 
 var car_list = [];  // 车辆变量
 
+var rankModal = {};  // 终点排名弹框
+
+var game_controller = {
+    is_run: false  // 是否正在跑
+};
+
 init();        // Laya 环境 初始化
 initTitle();   // 绘制头部 title
 initBottom();  // 绘制底部
 createMap();   // 创建地图
 createCars();  // 创建车辆
-initStartNumber();  // 开场的数字变化
 
 // 点击屏幕开始比赛
 // Laya.stage.once(Laya.Event.CLICK, this, startRun);
 // startRun();
-Laya.stage.once(Laya.Event.CLICK, this, startNumberRun);
+Laya.stage.on(Laya.Event.CLICK, this, startNumberRun);
 
 // Laya 环境 初始化
 function init() {
@@ -58,14 +63,12 @@ function init() {
     Laya.stage.bgColor = "#dbd030";
 }
 
-// 开场的数字变化
-function initStartNumber() {
-    startNumber.ape = new Sprite();
-    Laya.stage.addChild(startNumber.ape);
-}
-
 // 开场的数字变化动画
 function startNumberRun() {
+    if (game_controller.is_run) return ;
+    game_controller.is_run = true;
+    startNumber.ape = new Sprite();
+    Laya.stage.addChild(startNumber.ape);
     for (var i = 3; i >= 0; i--) {
         ;(function(i) {
             window.setTimeout(function() {
@@ -252,7 +255,7 @@ function createMap() {
 
 // 车辆 初始化
 function createCars() {
-    var number_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    var number_list = [3, 2, 1, 6, 5, 4, 9, 8, 7, 10];
     // var number_list = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
     for (var i = 0; i < 10; i++) {
@@ -352,7 +355,8 @@ function startMapRun() {
     startMap.x -= startMap.speed;
     startMap.ape.pos(startMap.x, startMap.y);
     if (startMap.x <= -win_w) {
-        Laya.stage.removeChild(startMap.ape);
+        // Laya.stage.removeChild(startMap.ape);
+        startMap.ape.visible = false;
         Laya.timer.clear(this, startMapRun);
     }
 }
@@ -374,7 +378,10 @@ function onMapRun() {
             Laya.timer.clear(this, onMapRun);
             Laya.timer.clear(this, carRun);
             Laya.timer.clear(this, sortCarRank);
-            errorReport();  // 错误判断与收集
+            window.setTimeout(function() {
+                showRankModal();  // 到达终点的时候弹框显示排名
+            }, 1000);
+            errorReport();    // 错误判断与收集
         }
         onMap.x += win_w;
     }
@@ -439,6 +446,142 @@ function sortCarRank() {
     });
 }
 
+// showRankModal();
+// 到达终点的时候弹框显示排名
+function showRankModal() {
+    var w = (1 - 0.16 * 2) * win_w,
+        h = (1 - 0.19 * 2) * win_h,
+        w2 = 0,
+        h2 = 0,
+        path = newPath(w, h, 10),
+        rank_list = null;
+
+    // 绘制半透明白色 背景
+    rankModal.bg = new Sprite();
+    rankModal.bg.width = win_w;
+    rankModal.bg.height = win_h;
+    rankModal.bg.graphics.alpha(0.4);
+    rankModal.bg.graphics.drawRect(0, 0, win_w, win_h, '#fff');
+    rankModal.bg.graphics.restore();
+    rankModal.bg.graphics.save();
+
+    // 绘制 白色 圆角矩形
+    rankModal.bg.graphics.alpha(1);
+    rankModal.bg.graphics.drawPath(0.16 * win_w, 0.19 * win_h, path, {'fillStyle': '#FFFFFF'});
+    rankModal.bg.graphics.restore();
+    rankModal.bg.graphics.save();
+    Laya.stage.addChild(rankModal.bg);
+
+    // 绘制 返回按钮
+    rankModal.btn_back = {
+        ape: new Sprite(),
+        w: 0.2 * win_w,
+        h: 0.1 * win_h,
+        text: new Text()
+    };
+    rankModal.btn_back.path = newPath(rankModal.btn_back.w, rankModal.btn_back.h, 6);
+    rankModal.btn_back.ape.width = rankModal.btn_back.w;
+    rankModal.btn_back.ape.height = rankModal.btn_back.h;
+    rankModal.btn_back.ape.graphics.drawPath(-0.5 * rankModal.btn_back.w, -0.5 * rankModal.btn_back.h, rankModal.btn_back.path, {'fillStyle': '#ccc'});
+    rankModal.btn_back.ape.graphics.restore();
+    rankModal.btn_back.ape.graphics.save();
+    rankModal.btn_back.text.width = rankModal.btn_back.w;
+    rankModal.btn_back.text.height = rankModal.btn_back.h;
+    rankModal.btn_back.text.fontSize = 16;
+    rankModal.btn_back.text.text = '返回';
+    rankModal.btn_back.text.align = 'center';
+    rankModal.btn_back.text.valign = 'middle';
+    rankModal.btn_back.text.pos(-0.5 * rankModal.btn_back.w, -0.5 * rankModal.btn_back.h);
+    rankModal.btn_back.ape.pos((0.5 - 0.15) * win_w, 0.72 * win_h);
+    rankModal.btn_back.ape.addChild(rankModal.btn_back.text);
+    Laya.stage.addChild(rankModal.btn_back.ape);
+
+    // 绘制 重新看一遍
+    rankModal.btn_replay = {
+        ape: new Sprite(),
+        w: 0.2 * win_w,
+        h: 0.1 * win_h,
+        text: new Text()
+    };
+    rankModal.btn_replay.path = newPath(rankModal.btn_replay.w, rankModal.btn_replay.h, 6);
+    rankModal.btn_replay.ape.width = rankModal.btn_replay.w;
+    rankModal.btn_replay.ape.height = rankModal.btn_replay.h;
+    rankModal.btn_replay.ape.graphics.drawPath(-0.5 * rankModal.btn_replay.w, -0.5 * rankModal.btn_replay.h, rankModal.btn_replay.path, {'fillStyle': '#bdd'});
+    rankModal.btn_replay.ape.graphics.restore();
+    rankModal.btn_replay.ape.graphics.save();
+    rankModal.btn_replay.text.width = rankModal.btn_replay.w;
+    rankModal.btn_replay.text.height = rankModal.btn_replay.h;
+    rankModal.btn_replay.text.fontSize = 16;
+    rankModal.btn_replay.text.text = '再看一遍';
+    rankModal.btn_replay.text.align = 'center';
+    rankModal.btn_replay.text.valign = 'middle';
+    rankModal.btn_replay.text.pos(-0.5 * rankModal.btn_replay.w, -0.5 * rankModal.btn_replay.h);
+    rankModal.btn_replay.ape.pos((0.5 + 0.15) * win_w, 0.72 * win_h);
+    rankModal.btn_replay.ape.addChild(rankModal.btn_replay.text);
+    Laya.stage.addChild(rankModal.btn_replay.ape);
+
+    // 生成 需要绘制的车辆
+    rank_list = car_list.map(function(car) {
+        return {
+            number: car.number,
+            num_str: (car.number >= 9) ? '10' : '0' + (car.number + 1),
+            x: Math.abs(car.time)
+        };
+    }).sort(function(a, b) {
+        return b.x - a.x;
+    });
+
+    // 绘制车辆 与 号码
+    w = 0.15 * win_w;
+    h = w * 153 / 272;
+    w2 = w;
+    h2 = w * 56 / 272;
+    rankModal.car = [];
+    for (var i = 0; i < 3; i++) {
+        rankModal.car.push(new Sprite);
+        rankModal.car[i].loadImage('images/car/bjsc_wing_' + rank_list[i].num_str + '.png', -0.5 * w, -0.5 * h, w, h);
+        rankModal.car[i].loadImage('images/number/result_' + (i + 1) + '.png', -0.5 * w2, -3.5 * h2, w2, h2);
+        Laya.stage.addChild(rankModal.car[i]);
+    }
+    rankModal.car[0].pos(win_w * 0.5, win_h * (0.5 - 0.035));
+    rankModal.car[1].pos(win_w * (0.5 - 0.2), win_h * 0.5);
+    rankModal.car[2].pos(win_w * (0.5 + 0.2), win_h * (0.5 + 0.035));
+
+    // 事件绑定
+    rankModal.bg.on(Laya.Event.CLICK, this, function(e) {
+        e.stopPropagation();
+    });
+    rankModal.btn_back.ape.once('click', this, function() {
+        window.location.reload();
+    });
+    rankModal.btn_replay.ape.once(Laya.Event.CLICK, this, function(e) {
+        // remove 掉自己的弹层
+        Laya.stage.removeChild(rankModal.bg);
+        Laya.stage.removeChild(rankModal.btn_back.ape);
+        Laya.stage.removeChild(rankModal.btn_replay.ape);
+        for (var i = 0; i < 3; i++) {
+            Laya.stage.removeChild(rankModal.car[i]);
+        }
+
+        on_map_count = 0;
+        game_controller.is_run = false;
+
+        car_list.forEach(function(car) {
+            car.x = 16;
+            car.zhen = 0;
+            car.ape.pos(car.x, car.y);
+        });
+
+        startMap.x = onMap.x = 0;
+        endMap.x = endMap._x + win_w;
+        endMap.speed = 0;
+        startMap.ape.pos(startMap.x, startMap.y);
+        startMap.ape.visible = true;
+        onMap.ape.pos(onMap.x, onMap.y);
+        endMap.ape.pos(endMap.x, endMap.y);
+    });
+}
+
 // 错误收集
 function errorReport() {
     var err_num = 0;
@@ -488,10 +631,23 @@ function errorReport() {
     // }
 }
 
+// 重新加载页面
 function errReload() {
     window.setTimeout(function() {
         window.location.reload();
     }, 200);
+}
+
+// --------------------- 以下是一些工具函数 ---------------------
+
+function newPath(w, h, r) {
+    return [
+        ['moveTo', 0, 0, 0, 0, r],
+        ['arcTo', w, 0, w, 1, r],
+        ['arcTo', w, h, w - 1, h, r],
+        ['arcTo', 0, h, 0, h - 1, r],
+        ['arcTo', 0, 0, 1, 0, r]
+    ];
 }
 
 
