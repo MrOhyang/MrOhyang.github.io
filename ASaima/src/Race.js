@@ -43,6 +43,46 @@ var game_controller = {
     is_run: false  // 是否正在跑
 };
 
+/*
+
+// 加载
+function loadResource() {
+    var imgsrc_list = [],
+        base_src = 'images/',
+        btn_src = base_src + 'btn/',
+        number_src = base_src + 'number/';
+
+    for (var i = 0; i < 3; i++) {
+        // 加载开场的数字变化 动画
+        imgsrc_list.push(base_src + 'threeSecoond_' + (i + 1) + '.png');
+    }
+    for (var i = 0; i < 10; i++) {
+        // 加载顶部 的 号码
+        imgsrc_list.push(number_src + 'bjsc_card_' + (i + 1) + '.png');
+    }
+    imgsrc_list.push(btn_src + 'cqssc_back_btn.png');  // 左上角返回键
+    imgsrc_list.push(btn_src + 'bjsc_logo.png');  // logo
+    imgsrc_list.push(btn_src + 'bjsc_box.png');  // 按钮背景
+}
+
+// Laya 环境 初始化
+function init() {
+    Laya.init(win_w, win_h, WebGL);
+    Laya.stage.alignV = Stage.ALIGN_MIDDLE;
+    Laya.stage.alignH = Stage.ALIGN_CENTER;
+
+    Laya.stage.scaleMode = "showall";
+    if (isHorizontal) Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;
+    Laya.stage.bgColor = "#fff";
+}
+
+Laya.loader.load(
+    ['images/threeSecoond_1.png'],
+    Handler.create(this, printFinished)
+);
+
+*/
+
 init();        // Laya 环境 初始化
 initTitle();   // 绘制头部 title
 initBottom();  // 绘制底部
