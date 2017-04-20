@@ -15,6 +15,8 @@ window.ohyang = this;
 var isHorizontal = true,
     win_w = isHorizontal ? Browser.clientHeight : Browser.clientWidth,
     win_h = isHorizontal ? Browser.clientWidth : Browser.clientHeight;
+win_w = (Browser.clientWidth > Browser.clientHeight) ? Browser.clientWidth : Browser.clientHeight;
+win_h = (Browser.clientWidth > Browser.clientHeight) ? Browser.clientHeight : Browser.clientWidth;
 
 var title_obj = {  // 首页头部变量
     'left_btn': {},     // 返回按钮
