@@ -526,7 +526,7 @@ function showRankModal() {
     rankModal.btn_back.path = newPath(rankModal.btn_back.w, rankModal.btn_back.h, 6);
     rankModal.btn_back.ape.width = rankModal.btn_back.w;
     rankModal.btn_back.ape.height = rankModal.btn_back.h;
-    rankModal.btn_back.ape.graphics.drawPath(-0.5 * rankModal.btn_back.w, -0.5 * rankModal.btn_back.h, rankModal.btn_back.path, {'fillStyle': '#ccc'});
+    rankModal.btn_back.ape.graphics.drawPath(0, 0, rankModal.btn_back.path, {'fillStyle': '#ccc'});
     rankModal.btn_back.ape.graphics.restore();
     rankModal.btn_back.ape.graphics.save();
     rankModal.btn_back.text.width = rankModal.btn_back.w;
@@ -535,8 +535,7 @@ function showRankModal() {
     rankModal.btn_back.text.text = '返回';
     rankModal.btn_back.text.align = 'center';
     rankModal.btn_back.text.valign = 'middle';
-    rankModal.btn_back.text.pos(-0.5 * rankModal.btn_back.w, -0.5 * rankModal.btn_back.h);
-    rankModal.btn_back.ape.pos((0.5 - 0.15) * win_w, 0.72 * win_h);
+    rankModal.btn_back.ape.pos((0.5 - 0.15) * win_w - 0.5 * rankModal.btn_back.w, 0.72 * win_h - 0.5 * rankModal.btn_back.h);
     rankModal.btn_back.ape.addChild(rankModal.btn_back.text);
     Laya.stage.addChild(rankModal.btn_back.ape);
 
@@ -550,7 +549,7 @@ function showRankModal() {
     rankModal.btn_replay.path = newPath(rankModal.btn_replay.w, rankModal.btn_replay.h, 6);
     rankModal.btn_replay.ape.width = rankModal.btn_replay.w;
     rankModal.btn_replay.ape.height = rankModal.btn_replay.h;
-    rankModal.btn_replay.ape.graphics.drawPath(-0.5 * rankModal.btn_replay.w, -0.5 * rankModal.btn_replay.h, rankModal.btn_replay.path, {'fillStyle': '#bdd'});
+    rankModal.btn_replay.ape.graphics.drawPath(0, 0, rankModal.btn_replay.path, {'fillStyle': '#bdd'});
     rankModal.btn_replay.ape.graphics.restore();
     rankModal.btn_replay.ape.graphics.save();
     rankModal.btn_replay.text.width = rankModal.btn_replay.w;
@@ -559,8 +558,7 @@ function showRankModal() {
     rankModal.btn_replay.text.text = '再看一遍';
     rankModal.btn_replay.text.align = 'center';
     rankModal.btn_replay.text.valign = 'middle';
-    rankModal.btn_replay.text.pos(-0.5 * rankModal.btn_replay.w, -0.5 * rankModal.btn_replay.h);
-    rankModal.btn_replay.ape.pos((0.5 + 0.15) * win_w, 0.72 * win_h);
+    rankModal.btn_replay.ape.pos((0.5 + 0.15) * win_w - 0.5 * rankModal.btn_replay.w, 0.72 * win_h - 0.5 * rankModal.btn_replay.h);
     rankModal.btn_replay.ape.addChild(rankModal.btn_replay.text);
     Laya.stage.addChild(rankModal.btn_replay.ape);
 
