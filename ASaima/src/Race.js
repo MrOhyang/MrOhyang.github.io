@@ -37,57 +37,22 @@ var on_map_count = 0;  // 地图整页的数量
 
 var car_list = [];  // 车辆变量
 
+var loading = null;  // loading 层
+
 var rankModal = {};  // 终点排名弹框
 
 var game_controller = {
-    is_run: false  // 是否正在跑
+    'is_ready': false,  // 是否资源加载完毕
+    'is_run': false     // 是否正在跑
 };
 
-/*
-
-// 加载
-function loadResource() {
-    var imgsrc_list = [],
-        base_src = 'images/',
-        btn_src = base_src + 'btn/',
-        number_src = base_src + 'number/';
-
-    for (var i = 0; i < 3; i++) {
-        // 加载开场的数字变化 动画
-        imgsrc_list.push(base_src + 'threeSecoond_' + (i + 1) + '.png');
-    }
-    for (var i = 0; i < 10; i++) {
-        // 加载顶部 的 号码
-        imgsrc_list.push(number_src + 'bjsc_card_' + (i + 1) + '.png');
-    }
-    imgsrc_list.push(btn_src + 'cqssc_back_btn.png');  // 左上角返回键
-    imgsrc_list.push(btn_src + 'bjsc_logo.png');  // logo
-    imgsrc_list.push(btn_src + 'bjsc_box.png');  // 按钮背景
-}
-
-// Laya 环境 初始化
-function init() {
-    Laya.init(win_w, win_h, WebGL);
-    Laya.stage.alignV = Stage.ALIGN_MIDDLE;
-    Laya.stage.alignH = Stage.ALIGN_CENTER;
-
-    Laya.stage.scaleMode = "showall";
-    if (isHorizontal) Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;
-    Laya.stage.bgColor = "#fff";
-}
-
-Laya.loader.load(
-    ['images/threeSecoond_1.png'],
-    Handler.create(this, printFinished)
-);
-
-*/
-
-init();        // Laya 环境 初始化
-initTitle();   // 绘制头部 title
-initBottom();  // 绘制底部
-createMap();   // 创建地图
-createCars();  // 创建车辆
+init();           // Laya 环境 初始化
+loadResource();   // 资源预加载
+initTitle();      // 绘制头部 title
+initBottom();     // 绘制底部
+createMap();      // 创建地图
+createCars();     // 创建车辆
+createLoading();  // 创造一个 loading 层
 
 // 点击屏幕开始比赛
 // Laya.stage.once(Laya.Event.CLICK, this, startRun);
@@ -103,11 +68,38 @@ function init() {
     Laya.stage.scaleMode = "showall";
     if (isHorizontal) Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;
     Laya.stage.bgColor = "#dbd030";
+    // Laya.Stat.show();
+}
+
+// 预加载资源
+function loadResource() {
+    var imgsrc_list = [],
+        base_src = 'images/',
+        btn_src = base_src + 'btn/',
+        number_src = base_src + 'number/';
+
+    for (var i = 0; i <= 3; i++) {
+        // 加载开场的数字变化 动画
+        imgsrc_list.push(base_src + 'threeSecoond_' + i + '.png');
+    }
+    for (var i = 0; i < 10; i++) {
+        // 加载顶部 的 号码
+        imgsrc_list.push(number_src + 'bjsc_card_' + (i + 1) + '.png');
+    }
+    imgsrc_list.push(btn_src + 'cqssc_back_btn.png');  // 左上角返回键
+    imgsrc_list.push(base_src + 'bjsc_logo.png');  // logo
+    imgsrc_list.push(btn_src + 'bjsc_box.png');  // 按钮背景
+
+    Laya.loader.load(imgsrc_list, Handler.create(this, function() {
+        console.log('加载完毕');
+        game_controller.is_ready = true;
+        Laya.stage.removeChild(loading);
+    }));
 }
 
 // 开场的数字变化动画
 function startNumberRun() {
-    if (game_controller.is_run) return ;
+    if (!game_controller.is_ready || game_controller.is_run) return ;
     game_controller.is_run = true;
     startNumber.ape = new Sprite();
     Laya.stage.addChild(startNumber.ape);
@@ -381,6 +373,16 @@ function createCars() {
         car.ape.pos(car.x, car.y);
         Laya.stage.addChild(car.ape);
     });
+}
+
+// 创建一个 loading 层
+function createLoading() {
+    loading = new Sprite();
+    loading.graphics.alpha(0.4);
+    loading.graphics.drawRect(0, 0, win_w, win_h, '#fff');
+    loading.graphics.restore();
+    loading.graphics.save();
+    Laya.stage.addChild(loading);
 }
 
 // 开始
