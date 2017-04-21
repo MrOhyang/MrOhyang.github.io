@@ -74,22 +74,30 @@ function init() {
 
 // 预加载资源
 function loadResource() {
-    var imgsrc_list = [],
+    var imgsrc_list = null,
         base_src = 'images/',
         btn_src = base_src + 'btn/',
-        number_src = base_src + 'number/';
+        car_src = base_src + 'car/',
+        number_src = base_src + 'number/',
+        road_src = base_src + 'road/';
 
+    imgsrc_list = [
+        base_src + 'bjsc_logo.png',  // logo
+        btn_src + 'cqssc_back_btn.png',  // 左上角返回键
+        btn_src + 'bjsc_box.png',        // 按钮背景
+        road_src + 'bjsc_car_ number.png',  // 道路 编号
+        road_src + 'bjsc_end.png',          // 道路 终点线
+        road_src + 'bjsc_road_on.png',      // 道路 过渡地图
+        road_src + 'bjsc_road_start.png'    // 道路 终点地图
+    ];
     for (var i = 0; i <= 3; i++) {
         // 加载开场的数字变化 动画
         imgsrc_list.push(base_src + 'threeSecoond_' + i + '.png');
     }
     for (var i = 0; i < 10; i++) {
-        // 加载顶部 的 号码
-        imgsrc_list.push(number_src + 'bjsc_card_' + (i + 1) + '.png');
+        imgsrc_list.push(car_src + 'bjsc_car_' + (i + 1) + '.png');  // 加载车辆图片
+        imgsrc_list.push(number_src + 'bjsc_card_' + (i + 1) + '.png');  // 加载顶部 的 号码
     }
-    imgsrc_list.push(btn_src + 'cqssc_back_btn.png');  // 左上角返回键
-    imgsrc_list.push(base_src + 'bjsc_logo.png');  // logo
-    imgsrc_list.push(btn_src + 'bjsc_box.png');  // 按钮背景
 
     Laya.loader.load(imgsrc_list, Handler.create(this, function() {
         console.log('加载完毕');
@@ -426,7 +434,7 @@ function onMapRun() {
             Laya.timer.clear(this, sortCarRank);
             window.setTimeout(function() {
                 showRankModal();  // 到达终点的时候弹框显示排名
-            }, 1000);
+            }, 1200);
             errorReport();    // 错误判断与收集
         }
         onMap.x += win_w;
