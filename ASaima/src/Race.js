@@ -33,7 +33,8 @@ var startMap = {},   // 地图变量
     endMap = {},     // 终点地图
     numberMap = {};  // 跑道尽头号码地标
 
-var on_map_count = 0;  // 地图整页的数量
+var on_map_count = 0,     // 当前地图整页的数量
+    on_map_allcount = 3;  // on_map 的数量
 
 var car_list = [];  // 车辆变量
 
@@ -294,23 +295,25 @@ function createCars() {
 
     for (var i = 0; i < 10; i++) {
         var obj = {
-            s: [],
-            x: 16,
-            his_x: [],
-            zhen: 0,
-            y: startMap.y + win_h * 0.193 + i * win_h * 0.056,
-            speed: [],
+            s: [],      // 行驶的距离 分段
+            _x: 16,     // 原始 x 坐标
+            x: 16,      // 当前 x 坐标
+            his_x: [],  // 历史 x 坐标
+            zhen: 0,    // 历史坐标索引
+            y: startMap.y + win_h * 0.193 + i * win_h * 0.056,  // 当前 y 坐标
+            speed: [],  // 速度分段
             ape: new Sprite()
         };
         var s1 = s2 = s3 = 0;
 
+        // 这里需要跟 on_map_allcount 数量对应上
         obj.s.push(1 + 0.15 + Math.random() * (0.4 - 0.13));
         obj.s.push(2 - obj.s[0] + 0.1 + Math.random() * (0.5 - 0.1));
         obj.s.push(3 - obj.s[0] - obj.s[1] + 0.2 + Math.random() * (0.6 - 0.2));
 
-        obj.speed.push((obj.s[0] / 250 - 0.004) * win_w);
-        obj.speed.push((obj.s[1] / 250 - 0.004) * win_w);
-        obj.speed.push((obj.s[2] / 250 - 0.004) * win_w);
+        for (var j = 0; j < on_map_allcount; j++) {
+            obj.speed.push((obj.s[j] / 250 - 0.004) * win_w);
+        }
 
         obj.w = win_w * 0.09;
         obj.h = obj.w * 65 / 180;
@@ -335,17 +338,16 @@ function createCars() {
         // 方法2
         var temp_x = obj.x;
             temp_end_x = endMap.x;
+
         obj.his_x.push(temp_x);
-        for (var j = 0; j < 250; j++) {
-            temp_x += obj.speed[0];
-            obj.his_x.push(temp_x);
+        for (var j = 0; j < (on_map_allcount - 1); j++) {
+            for (var k = 0; k < 250; k++) {
+                temp_x += obj.speed[j];
+                obj.his_x.push(temp_x);
+            }
         }
         for (var j = 0; j < 250; j++) {
-            temp_x += obj.speed[1];
-            obj.his_x.push(temp_x);
-        }
-        for (var j = 0; j < 250; j++) {
-            temp_x += obj.speed[2];
+            temp_x += obj.speed[on_map_allcount - 1];
             obj.his_x.push(temp_x);
             temp_end_x -= (0.004 * win_w);
             if (temp_x + obj.w >= temp_end_x) {
@@ -410,11 +412,11 @@ function onMapRun() {
     onMap.x -= onMap.speed;
     if (onMap.x <= -win_w) {
         console.log('第' + ++on_map_count + '屏结束');
-        if (on_map_count == 2) {
+        if (on_map_count == (on_map_allcount - 1)) {
             endMap.speed = 0.004 * win_w;
             // Laya.timer.frameLoop(1, this, endMapRun);
         }
-        if (on_map_count == 3) {
+        if (on_map_count == on_map_allcount) {
             console.log('---------');
             car_list.forEach(function(car) {
                 console.log(car.number, car.x, car.time);
@@ -609,7 +611,7 @@ function showRankModal() {
         game_controller.is_run = false;
 
         car_list.forEach(function(car) {
-            car.x = 16;
+            car.x = car._x;
             car.zhen = 0;
             car.ape.pos(car.x, car.y);
         });
