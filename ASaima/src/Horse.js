@@ -68,7 +68,7 @@ function init() {
 
     Laya.stage.scaleMode = "showall";
     if (isHorizontal) Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;
-    Laya.stage.bgColor = "#dbd030";
+    Laya.stage.bgColor = "#2c3b40";
     // Laya.Stat.show();
 }
 
@@ -83,13 +83,13 @@ function loadResource() {
         json_src = 'res/atlas/comp/';
 
     imgsrc_list = [
-        base_src + 'bjsc_logo.png'  // logo
+        base_src + 'paoma_logo.png'  // logo
         ,btn_src + 'cqssc_back_btn.png'  // 左上角返回键
-        ,btn_src + 'bjsc_box.png'        // 按钮背景 
+        ,btn_src + 'paoma_box.png'       // 按钮背景 
         ,road_src + 'bjsc_car_ number.png'  // 道路 编号
-        ,road_src + 'bjsc_end.png'          // 道路 终点线
-        ,road_src + 'bjsc_road_on.png'      // 道路 过渡地图
-        ,road_src + 'bjsc_road_start.png'   // 道路 终点地图
+        ,road_src + 'paoma_end.png'         // 道路 终点线
+        ,road_src + 'paoma_road_on.png'     // 道路 过渡地图
+        ,road_src + 'paoma_road_start.png'  // 道路 终点地图
         // ,json_src + 'paoma.json'  // 马匹
         ,json_src + 'paoma.png'   // 马匹
     ];
@@ -149,7 +149,7 @@ function initTitle() {
     // logo
     logo.h = 0.046 * win_h;
     logo.w = logo.h * 216 / 48;
-    logo.ape = new Sprite().loadImage('images/bjsc_logo.png', 0, 0, logo.w, logo.h);
+    logo.ape = new Sprite().loadImage('images/paoma_logo.png', 0, 0, logo.w, logo.h);
     logo.ape.pos(0.16 * win_h, 0.008 * win_h);
     Laya.stage.addChild(logo.ape);
 
@@ -158,7 +158,7 @@ function initTitle() {
     msg.x = 0.16 * win_h;
     msg.y = 0.058 * win_h;
     msg.fontSize = 14;
-    msg.color = '#000';
+    msg.color = '#fff';
     msg.text = '本期：612751';
     Laya.stage.addChild(msg);
 
@@ -183,6 +183,7 @@ function initTitle() {
 function initBottom() {
     var btn = null,
         bg = null,
+        shu = null,
         y = 0.875 * win_h,
         h = 0.11 * win_h;
 
@@ -190,10 +191,13 @@ function initBottom() {
 
     btn = new Sprite();
     bg = new Sprite();
-    bg.loadImage('images/btn/bjsc_box.png', 0, 0, 0.35 * win_w, h);
+    shu = new Sprite();
+    bg.loadImage('images/btn/paoma_box.png', 0, 0, 0.35 * win_w, h);
+    shu.graphics.drawRect(0.208 * win_w, 0.53 * h, 2, 0.39 * h, '#905432');
     btn.addChild(bg);
+    btn.addChild(shu);
 
-    addP(btn, '时间/期数', 0.13 * win_w);
+    addP(btn, '时间/期数', 0.35 * win_w);
     addP2(btn, '612751', 0.25 * win_w);
     addP2(btn, '2017-04-16 14:42', 0.03 * win_w);
 
@@ -204,10 +208,14 @@ function initBottom() {
 
     btn = new Sprite();
     bg = new Sprite();
-    bg.loadImage('images/btn/bjsc_box.png', 0, 0, 0.20 * win_w, h);
+    shu = new Sprite();
+    bg.loadImage('images/btn/paoma_box.png', 0, 0, 0.20 * win_w, h);
+    shu.graphics.drawRect(0.065 * win_w, 0.53 * h, 2, 0.39 * h, '#905432');
+    shu.graphics.drawRect(0.133 * win_w, 0.53 * h, 2, 0.39 * h, '#905432');
     btn.addChild(bg);
+    btn.addChild(shu);
 
-    addP(btn, '冠亚军和', 0.06 * win_w);
+    addP(btn, '冠亚军和', 0.20 * win_w);
     addP2(btn, '11', 0.02 * win_w);
     addP2(btn, '小', 0.09 * win_w);
     addP2(btn, '单', 0.16 * win_w);
@@ -219,10 +227,15 @@ function initBottom() {
 
     btn = new Sprite();
     bg = new Sprite();
-    bg.loadImage('images/btn/bjsc_box.png', 0, 0, 0.35 * win_w, h);
+    shu = new Sprite();
+    bg.loadImage('images/btn/paoma_box.png', 0, 0, 0.35 * win_w, h);
+    for (var i = 0; i < 4; i++) {
+        shu.graphics.drawRect((0.065 + 0.071 * i) * win_w, 0.53 * h, 2, 0.39 * h, '#905432');
+    }
     btn.addChild(bg);
+    btn.addChild(shu);
 
-    addP(btn, '1~5 龙虎', 0.13 * win_w);
+    addP(btn, '1~5 龙虎', 0.35 * win_w);
     addP2(btn, '虎', 0.02 * win_w);
     addP2(btn, '虎', (0.02 + 0.072 * 1) * win_w);
     addP2(btn, '龙', (0.02 + 0.072 * 2) * win_w);
@@ -235,10 +248,11 @@ function initBottom() {
     // ----
 
     // 添加黑色标题
-    function addP(btn, text, x) {
+    function addP(btn, text, w) {
         var p = new Text();
 
-        p.x = x;
+        p.width = w;
+        p.align = 'center';
         p.y = 0.01 * win_h;
         p.fontSize = 14;
         p.text = text;
@@ -270,26 +284,26 @@ function createMap() {
 
     endMap._x = 0.129 * win_w;
     endMap.x = endMap._x + win_w;
-    endMap.y = 0.286 * win_h;
-    endMap.h = 0.557 * win_h;
-    endMap.w = endMap.h * 36 / 417;
+    endMap.y = 0.257 * win_h;
+    endMap.h = 0.597 * win_h;
+    endMap.w = endMap.h * 65 / 451;
     endMap.speed = 0;
 
-    numberMap.h = 0.532 * win_h;
+    numberMap.h = 0.570 * win_h;
     numberMap.w = numberMap.h * 47 / 603;
     numberMap.x = win_w - numberMap.w - 6;
-    numberMap.y = 0.304 * win_h;
+    numberMap.y = 0.275 * win_h;
 
     startMap.ape = new Sprite();
     onMap.ape = new Sprite();
     endMap.ape = new Sprite();
     numberMap.ape = new Sprite();
-    startMap.ape.loadImage('images/road/bjsc_road_start.png', 0, 0, startMap.w, startMap.h);
+    startMap.ape.loadImage('images/road/paoma_road_start.png', 0, 0, startMap.w, startMap.h);
     startMap.ape.pos(startMap.x, startMap.y);
-    onMap.ape.loadImage('images/road/bjsc_road_on.png', 0, 0, onMap.w, onMap.h);
-    onMap.ape.loadImage('images/road/bjsc_road_on.png', 0 + win_w, 0, onMap.w, onMap.h);
+    onMap.ape.loadImage('images/road/paoma_road_on.png', 0, 0, onMap.w, onMap.h);
+    onMap.ape.loadImage('images/road/paoma_road_on.png', 0 + win_w, 0, onMap.w, onMap.h);
     onMap.ape.pos(onMap.x, onMap.y);
-    endMap.ape.loadImage('images/road/bjsc_end.png', 0, 0, endMap.w, endMap.h);
+    endMap.ape.loadImage('images/road/paoma_end.png', 0, 0, endMap.w, endMap.h);
     endMap.ape.pos(endMap.x, endMap.y);
     numberMap.ape.loadImage('images/road/bjsc_car_ number.png', 0, 0, numberMap.w, numberMap.h);
     numberMap.ape.pos(numberMap.x, numberMap.y);
@@ -311,7 +325,7 @@ function createCars() {
             x: 16,      // 当前 x 坐标
             his_x: [],  // 历史 x 坐标
             zhen: 0,    // 历史坐标索引
-            y: startMap.y + win_h * 0.193 + i * win_h * 0.056,  // 当前 y 坐标
+            y: 0,       // 当前 y 坐标
             speed: [],  // 速度分段
             ape: new Animation()
         };
@@ -365,7 +379,7 @@ function createCars() {
     car_list.forEach(function(car) {
         var img_src = 'images/car/bjsc_car_' + (car.number + 1) + '.png';
 
-        car.y = startMap.y + win_h * 0.14 + car.number * win_h * 0.056 - 0.5 * car.h;
+        car.y = startMap.y + win_h * 0.19 + car.number * win_h * 0.060 - car.h;
 
         car.ape.loadAtlas('res/atlas/comp/paoma.json');
         car.ape.interval = 30;
@@ -508,7 +522,7 @@ function showRankModal() {
     rankModal.btn_back.path = newPath(rankModal.btn_back.w, rankModal.btn_back.h, 6);
     rankModal.btn_back.ape.width = rankModal.btn_back.w;
     rankModal.btn_back.ape.height = rankModal.btn_back.h;
-    rankModal.btn_back.ape.graphics.drawPath(0, 0, rankModal.btn_back.path, {'fillStyle': '#ccc'});
+    rankModal.btn_back.ape.graphics.drawPath(0, 0, rankModal.btn_back.path, {'fillStyle': '#c3c3c1'});
     rankModal.btn_back.ape.graphics.restore();
     rankModal.btn_back.ape.graphics.save();
     rankModal.btn_back.text.width = rankModal.btn_back.w;
@@ -531,7 +545,7 @@ function showRankModal() {
     rankModal.btn_replay.path = newPath(rankModal.btn_replay.w, rankModal.btn_replay.h, 6);
     rankModal.btn_replay.ape.width = rankModal.btn_replay.w;
     rankModal.btn_replay.ape.height = rankModal.btn_replay.h;
-    rankModal.btn_replay.ape.graphics.drawPath(0, 0, rankModal.btn_replay.path, {'fillStyle': '#bdd'});
+    rankModal.btn_replay.ape.graphics.drawPath(0, 0, rankModal.btn_replay.path, {'fillStyle': '#9fd6db'});
     rankModal.btn_replay.ape.graphics.restore();
     rankModal.btn_replay.ape.graphics.save();
     rankModal.btn_replay.text.width = rankModal.btn_replay.w;
@@ -594,6 +608,7 @@ function showRankModal() {
             car.x = car._x;
             car.zhen = 0;
             car.ape.pos(car.x, car.y);
+            car.ape.index = 0;
         });
 
         startMap.x = onMap.x = 0;
@@ -672,6 +687,11 @@ function newPath(w, h, r) {
         ['arcTo', 0, h, 0, h - 1, r],
         ['arcTo', 0, 0, 1, 0, r]
     ];
+}
+
+// reFontSize 根据屏幕宽度重新定义文字大小
+function reFS() {
+    // body...
 }
 
 
