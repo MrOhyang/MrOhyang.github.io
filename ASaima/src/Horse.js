@@ -1,6 +1,7 @@
 var Animation = Laya.Animation;
 var Sprite = Laya.Sprite;
 var Stage = Laya.Stage;
+var SoundManager = Laya.SoundManager;
 var Text = Laya.Text;
 var Texture = Laya.Texture;
 var TiledMap = Laya.TiledMap;
@@ -39,6 +40,12 @@ var on_map_count = 0,     // 当前地图整页的数量
 
 var car_list = [];  // 车辆变量
 
+var mp3 = {
+    bg: 'res/music/paoma_bg_edit.mp3',  // 背景音乐
+    di: 'res/music/di.mp3',             // 滴
+    start: 'res/music/start_edit.mp3'   // start 滴
+};
+
 var loading = null;  // loading 层
 
 var rankModal = {};  // 终点排名弹框
@@ -74,7 +81,7 @@ function init() {
 
 // 预加载资源
 function loadResource() {
-    var imgsrc_list = null,
+    var res_list = null,
         base_src = 'images/',
         btn_src = base_src + 'btn/',
         car_src = base_src + 'car/',
@@ -82,7 +89,7 @@ function loadResource() {
         road_src = base_src + 'road/',
         json_src = 'res/atlas/comp/';
 
-    imgsrc_list = [
+    res_list = [
         base_src + 'paoma_logo.png'  // logo
         ,btn_src + 'cqssc_back_btn.png'  // 左上角返回键
         ,btn_src + 'paoma_box.png'       // 按钮背景 
@@ -92,17 +99,20 @@ function loadResource() {
         ,road_src + 'paoma_road_start.png'  // 道路 终点地图
         // ,json_src + 'paoma.json'  // 马匹
         ,json_src + 'paoma.png'   // 马匹
+        // ,mp3.bg     // 背景音乐
+        // ,mp3.di     // 滴
+        // ,mp3.start  // start 滴
     ];
     for (var i = 0; i <= 3; i++) {
         // 加载开场的数字变化 动画
-        imgsrc_list.push(base_src + 'threeSecoond_' + i + '.png');
+        res_list.push(base_src + 'threeSecoond_' + i + '.png');
     }
     for (var i = 0; i < 10; i++) {
-        imgsrc_list.push(car_src + 'bjsc_car_' + (i + 1) + '.png');  // 加载车辆图片
-        imgsrc_list.push(number_src + 'bjsc_card_' + (i + 1) + '.png');  // 加载顶部 的 号码
+        res_list.push(car_src + 'bjsc_car_' + (i + 1) + '.png');  // 加载车辆图片
+        res_list.push(number_src + 'bjsc_card_' + (i + 1) + '.png');  // 加载顶部 的 号码
     }
 
-    Laya.loader.load(imgsrc_list, Handler.create(this, function() {
+    Laya.loader.load(res_list, Handler.create(this, function() {
         console.log('加载完毕');
         game_controller.is_ready = true;
         Laya.stage.removeChild(loading);
@@ -123,9 +133,16 @@ function startNumberRun() {
                 startNumber.ape.graphics.clear();
                 startNumber.ape.loadImage(img_src, -491/2, -119/2, 491, 119);
                 startNumber.ape.pos(win_w / 2, win_h / 2);
+                if (i == 0) {
+                    SoundManager.playSound(mp3.start, 1);
+                } else {
+                    SoundManager.playSound(mp3.di, 1);
+                }
             }, (3 - i) * 1000);
         })(i);
     }
+    SoundManager.playMusic(mp3.bg, 0.8);
+    SoundManager.setMusicVolume(0.8, mp3.bg);
     window.setTimeout(function() {
         Laya.stage.removeChild(startNumber.ape);
         startRun();
@@ -443,6 +460,7 @@ function onMapRun() {
             Laya.timer.clear(this, onMapRun);
             Laya.timer.clear(this, carRun);
             Laya.timer.clear(this, sortCarRank);
+            musicFadeOut(0.8, mp3.bg);  // 背景音乐渐渐消失
             window.setTimeout(function() {
                 showRankModal();  // 到达终点的时候弹框显示排名
             }, 1200);
@@ -695,6 +713,20 @@ function newPath(w, h, r) {
 // reFontSize 根据屏幕宽度重新定义文字大小
 function reFS() {
     // body...
+}
+
+// 音乐渐渐消失
+function musicFadeOut(number, src) {
+    if (number >= 0.1) {
+        SoundManager.setMusicVolume(number - 0.1, src);
+        ;(function(number) {
+            window.setTimeout(function() {
+                musicFadeOut(number, src);
+            }, 200);
+        })(number - 0.1);
+    } else {
+        SoundManager.stopMusic();
+    }
 }
 
 
