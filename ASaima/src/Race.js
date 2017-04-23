@@ -623,6 +623,9 @@ function showRankModal() {
             car.zhen = 0;
             car.ape.pos(car.x, car.y);
         });
+        number.forEach(function(number, index) {
+            number.ape.pos(number_posi[index], number.y);
+        });
 
         startMap.x = onMap.x = 0;
         endMap.x = endMap._x + win_w;
