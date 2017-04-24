@@ -36,7 +36,7 @@ var startMap = {},   // 地图变量
     numberMap = {};  // 跑道尽头号码地标
 
 var on_map_count = 0,     // 当前地图整页的数量
-    on_map_allcount = 3;  // on_map 的数量
+    on_map_allcount = 5;  // on_map 的数量
 
 var car_list = [];  // 车辆变量
 
@@ -346,12 +346,26 @@ function createCars() {
             speed: [],  // 速度分段
             ape: new Animation()
         };
-        var s1 = s2 = s3 = 0;
+
+        var temp_s = 0,      // 当前需要跑的距离
+            all_temp_s = 0;  // 累计
 
         // 这里需要跟 on_map_allcount 数量对应上
-        obj.s.push(1 + 0.15 + Math.random() * (0.4 - 0.13));
-        obj.s.push(2 - obj.s[0] + 0.1 + Math.random() * (0.5 - 0.1));
-        obj.s.push(3 - obj.s[0] - obj.s[1] + 0.2 + Math.random() * (0.6 - 0.2));
+
+        // 开头 1 段
+        temp_s = 1 + 0.15 + Math.random() * (0.4 - 0.13);
+        obj.s.push(temp_s);
+        all_temp_s += temp_s;
+        // 中间 n 段
+        for (var j = 2; j <= 4; j++) {
+            temp_s = j - all_temp_s + 0.1 + Math.random() * (0.5 - 0.1);
+            obj.s.push(temp_s);
+            all_temp_s += temp_s;
+        }
+        // 结尾 1 段
+        temp_s = 5 - all_temp_s + 0.2 + Math.random() * (0.6 - 0.2);
+        obj.s.push(temp_s);
+        all_temp_s += temp_s;
 
         for (var j = 0; j < on_map_allcount; j++) {
             obj.speed.push((obj.s[j] / 250 - 0.004) * win_w);
