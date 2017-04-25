@@ -67,6 +67,7 @@ createLoading();  // 创造一个 loading 层
 // 点击屏幕开始比赛
 // startRun();
 Laya.stage.on(Laya.Event.CLICK, this, startNumberRun);
+// Laya.stage.on(Laya.Event.CLICK, this, startRun);
 
 // Laya 环境 初始化
 function init() {
@@ -88,7 +89,7 @@ function loadResource() {
         car_src = base_src + 'car/',
         number_src = base_src + 'number/',
         road_src = base_src + 'road/',
-        json_src = 'res/atlas/comp/';
+        json_src = 'res/atlas/';
 
     res_list = [
         base_src + 'paoma_logo.png'  // logo
@@ -99,7 +100,6 @@ function loadResource() {
         ,road_src + 'paoma_road_on.png'     // 道路 过渡地图
         ,road_src + 'paoma_road_start.png'  // 道路 终点地图
         // ,json_src + 'paoma.json'  // 马匹
-        ,json_src + 'paoma.png'   // 马匹
         // ,mp3.bg     // 背景音乐
         // ,mp3.di     // 滴
         // ,mp3.start  // start 滴
@@ -110,7 +110,12 @@ function loadResource() {
     }
     for (var i = 0; i < 10; i++) {
         res_list.push(car_src + 'bjsc_car_' + (i + 1) + '.png');  // 加载车辆图片
-        res_list.push(number_src + 'bjsc_card_' + (i + 1) + '.png');  // 加载顶部 的 号码
+        res_list.push(number_src + (i + 1) + '.png');  // 加载顶部 的 号码
+        if (i < 9) {
+            res_list.push(json_src + 'paoma_0' + (i + 1) + '.png');
+        } else {
+            res_list.push(json_src + 'paoma_10.png');
+        }
     }
 
     Laya.loader.load(res_list, Handler.create(this, function() {
@@ -188,7 +193,7 @@ function initTitle() {
             y: 0.018 * win_h,
             ape: new Sprite()
         };
-        var img_src = 'images/number/bjsc_card_' + (i + 1) + '.png';
+        var img_src = 'images/number/' + (i + 1) + '.png';
 
         number_posi.push(0.30 * win_w + 0.08 * win_h * i);
         obj.ape.loadImage(img_src, 0, 0, obj.wh, obj.wh);
@@ -340,8 +345,8 @@ function createCars() {
     for (var i = 0; i < 10; i++) {
         var obj = {
             s: [],      // 行驶的距离 分段
-            _x: 16,     // 原始 x 坐标
-            x: 16,      // 当前 x 坐标
+            _x: -0.05 * win_w,     // 原始 x 坐标
+            x: -0.05 * win_w,      // 当前 x 坐标
             his_x: [],  // 历史 x 坐标
             zhen: 0,    // 历史坐标索引
             y: 0,       // 当前 y 坐标
@@ -355,7 +360,7 @@ function createCars() {
         // 这里需要跟 on_map_allcount 数量对应上
 
         // 开头 1 段
-        temp_s = 1 + 0.15 + Math.random() * (0.4 - 0.13);
+        temp_s = 0.05 + 1 + 0.15 + Math.random() * (0.4 - 0.13);
         obj.s.push(temp_s);
         all_temp_s += temp_s;
         // 中间 n 段
@@ -409,12 +414,16 @@ function createCars() {
     car_list.sort(function(a, b) {
         return a.number - b.number;
     });
-    car_list.forEach(function(car) {
+    car_list.forEach(function(car, i) {
         var img_src = 'images/car/bjsc_car_' + (car.number + 1) + '.png';
 
         car.y = startMap.y + win_h * 0.19 + car.number * win_h * 0.060 - car.h;
 
-        car.ape.loadAtlas('res/atlas/comp/paoma.json');
+        if (i < 9) {
+            car.ape.loadAtlas('res/atlas/paoma_0' + (i + 1) + '.json');
+        } else {
+            car.ape.loadAtlas('res/atlas/paoma_10.json');
+        }
         car.ape.interval = 30;
         car.ape.index = 0;
         car.ape.pos(car.x, car.y);
@@ -501,6 +510,9 @@ function carRun() {
         if (!car.his_x[car.zhen]) return ;
         car.x = car.his_x[car.zhen++];
         car.ape.pos(car.x, car.y);
+        if (car.x + car.w > endMap.x) {
+            // console.log('dayu');  // 可用于断点调试
+        }
     });
 }
 
@@ -605,20 +617,20 @@ function showRankModal() {
     });
 
     // 绘制车辆 与 号码
-    w = 0.15 * win_w;
-    h = w * 153 / 272;
+    w = 0.17 * win_w;
+    h = w;
     w2 = w;
     h2 = w * 56 / 272;
     rankModal.car = [];
     for (var i = 0; i < 3; i++) {
         rankModal.car.push(new Sprite);
-        rankModal.car[i].loadImage('images/car/bjsc_wing_' + rank_list[i].num_str + '.png', -0.5 * w, -0.5 * h, w, h);
-        rankModal.car[i].loadImage('images/number/result_' + (i + 1) + '.png', -0.5 * w2, -3.5 * h2, w2, h2);
+        rankModal.car[i].loadImage('images/car/horse_wing_' + rank_list[i].num_str + '.png', -0.5 * w, -0.5 * h, w, h);
+        rankModal.car[i].loadImage('images/number/result_' + (i + 1) + '.png', -0.5 * w2, -2.5 * h2, w2, h2);
         Laya.stage.addChild(rankModal.car[i]);
     }
-    rankModal.car[0].pos(win_w * 0.5, win_h * (0.5 - 0.035));
-    rankModal.car[1].pos(win_w * (0.5 - 0.2), win_h * 0.5);
-    rankModal.car[2].pos(win_w * (0.5 + 0.2), win_h * (0.5 + 0.035));
+    rankModal.car[0].pos(win_w * 0.5, win_h * (0.45 - 0.035));
+    rankModal.car[1].pos(win_w * (0.5 - 0.2), win_h * 0.45);
+    rankModal.car[2].pos(win_w * (0.5 + 0.2), win_h * (0.45 + 0.035));
 
     // 事件绑定
     rankModal.bg.on(Laya.Event.CLICK, this, function(e) {
