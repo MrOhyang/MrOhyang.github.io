@@ -68,7 +68,7 @@ createLoading();  // 创造一个 loading 层
 
 // 点击屏幕开始比赛
 // startRun();
-Laya.stage.on(Laya.Event.CLICK, this, startNumberRun);
+// Laya.stage.on(Laya.Event.CLICK, this, startNumberRun);
 // Laya.stage.on(Laya.Event.CLICK, this, startRun);
 
 // Laya 环境 初始化
@@ -97,7 +97,7 @@ function loadResource() {
         base_src + 'paoma_logo.png'  // logo
         ,btn_src + 'cqssc_back_btn.png'  // 左上角返回键
         ,btn_src + 'paoma_box.png'       // 按钮背景 
-        ,road_src + 'bjsc_car_ number.png'  // 道路 编号
+        ,road_src + 'bjsc_car_number.png'  // 道路 编号
         ,road_src + 'paoma_end.png'         // 道路 终点线
         ,road_src + 'paoma_road_on.png'     // 道路 过渡地图
         ,road_src + 'paoma_road_start.png'  // 道路 终点地图
@@ -114,15 +114,16 @@ function loadResource() {
         res_list.push(car_src + 'bjsc_car_' + (i + 1) + '.png');  // 加载车辆图片
         res_list.push(number_src + (i + 1) + '.png');  // 加载顶部 的 号码
         if (i < 9) {
-            res_list.push(json_src + 'paoma_0' + (i + 1) + '.png');
+            res_list.push(json_src + 'paoma_0' + (i + 1) + '_160x160/paoma_0' + (i + 1) + '_160x160.png');
         } else {
-            res_list.push(json_src + 'paoma_10.png');
+            res_list.push(json_src + 'paoma_10_160x160/paoma_10_160x160.png');
         }
     }
 
     Laya.loader.load(res_list, Handler.create(this, function() {
         console.log('加载完毕');
         game_controller.is_ready = true;
+        startNumberRun();
         Laya.stage.removeChild(loading);
     }));
 }
@@ -159,7 +160,7 @@ function startNumberRun() {
 }
 
 // 绘制头部 title
-function initTitle() {
+function initTitle(res) {
     var left_btn = title_obj.left_btn,
         logo = title_obj.logo,
         msg = title_obj.msg
@@ -185,7 +186,7 @@ function initTitle() {
     msg.y = 0.058 * win_h;
     msg.fontSize = 14;
     msg.color = '#fff';
-    msg.text = '本期：612751';
+    msg.text = '本期：' + res.period;
     Laya.stage.addChild(msg);
 
     // number
@@ -197,7 +198,7 @@ function initTitle() {
         };
         var img_src = 'images/number/' + (i + 1) + '.png';
 
-        number_posi.push(0.30 * win_w + 0.08 * win_h * i);
+        number_posi.push(0.34 * win_w + 0.08 * win_h * i);
         obj.ape.loadImage(img_src, 0, 0, obj.wh, obj.wh);
         obj.ape.pos(number_posi[i], obj.y);
         number.push(obj);
@@ -206,7 +207,7 @@ function initTitle() {
 }
 
 // 绘制底部
-function initBottom() {
+function initBottom(res) {
     var btn = null,
         bg = null,
         shu = null,
@@ -219,13 +220,13 @@ function initBottom() {
     bg = new Sprite();
     shu = new Sprite();
     bg.loadImage('images/btn/paoma_box.png', 0, 0, 0.35 * win_w, h);
-    shu.graphics.drawRect(0.208 * win_w, 0.53 * h, 2, 0.39 * h, '#905432');
+    shu.graphics.drawRect(0.204 * win_w, 0.53 * h, 2, 0.39 * h, '#905432');
     btn.addChild(bg);
     btn.addChild(shu);
 
     addP(btn, '时间/期数', 0.35 * win_w);
-    addP2(btn, '612751', 0.25 * win_w);
-    addP2(btn, '2017-04-16 14:42', 0.03 * win_w);
+    addP2(btn, res.time, 0, 0.2 * win_w);
+    addP2(btn, res.period, 0.21 * win_w, 0.14 * win_w);
 
     btn.pos(0.015 * win_w, y);
     Laya.stage.addChild(btn);
@@ -236,15 +237,15 @@ function initBottom() {
     bg = new Sprite();
     shu = new Sprite();
     bg.loadImage('images/btn/paoma_box.png', 0, 0, 0.20 * win_w, h);
-    shu.graphics.drawRect(0.065 * win_w, 0.53 * h, 2, 0.39 * h, '#905432');
+    shu.graphics.drawRect(0.063 * win_w, 0.53 * h, 2, 0.39 * h, '#905432');
     shu.graphics.drawRect(0.133 * win_w, 0.53 * h, 2, 0.39 * h, '#905432');
     btn.addChild(bg);
     btn.addChild(shu);
 
     addP(btn, '冠亚军和', 0.20 * win_w);
-    addP2(btn, '11', 0.02 * win_w);
-    addP2(btn, '小', 0.09 * win_w);
-    addP2(btn, '单', 0.16 * win_w);
+    addP2(btn, res.gysum[0], 0, 0.06 * win_w);
+    addP2(btn, res.gysum[1], 0.07 * win_w, 0.06 * win_w);
+    addP2(btn, res.gysum[2], 0.14 * win_w, 0.06 * win_w);
 
     btn.pos(0.390 * win_w, y);
     Laya.stage.addChild(btn);
@@ -262,11 +263,9 @@ function initBottom() {
     btn.addChild(shu);
 
     addP(btn, '1~5 龙虎', 0.35 * win_w);
-    addP2(btn, '虎', 0.02 * win_w);
-    addP2(btn, '虎', (0.02 + 0.072 * 1) * win_w);
-    addP2(btn, '龙', (0.02 + 0.072 * 2) * win_w);
-    addP2(btn, '虎', (0.02 + 0.072 * 3) * win_w);
-    addP2(btn, '虎', (0.02 + 0.072 * 4) * win_w);
+    for (var i = 0; i < 5; i++) {
+        addP2(btn, res.longhu[i], 0.071 * i * win_w, 0.062 * win_w);
+    }
 
     btn.pos(0.615 * win_w, y);
     Laya.stage.addChild(btn);
@@ -286,12 +285,15 @@ function initBottom() {
     }
 
     // 添加白色文字
-    function addP2(btn, text, x) {
+    function addP2(btn, text, x, w, h) {
         var p2 = new Text();
 
         p2.x = x;
+        p2.width = w;
         p2.y = 0.06 * win_h;
         p2.fontSize = 13;
+        p2.align = 'center';
+        // p2.bgColor = '#69F';
         p2.text = text;
         p2.color = '#fff';
         btn.addChild(p2);
@@ -331,7 +333,7 @@ function createMap() {
     onMap.ape.pos(onMap.x, onMap.y);
     endMap.ape.loadImage('images/road/paoma_end.png', 0, 0, endMap.w, endMap.h);
     endMap.ape.pos(endMap.x, endMap.y);
-    numberMap.ape.loadImage('images/road/bjsc_car_ number.png', 0, 0, numberMap.w, numberMap.h);
+    numberMap.ape.loadImage('images/road/bjsc_car_number.png', 0, 0, numberMap.w, numberMap.h);
     numberMap.ape.pos(numberMap.x, numberMap.y);
     Laya.stage.addChild(onMap.ape);
     Laya.stage.addChild(startMap.ape);
@@ -345,13 +347,11 @@ function createCars(result) {
     // var number_list = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
     number_list = result;
 
-    console.log(number_list);
-
     for (var i = 0; i < 10; i++) {
         var obj = {
             s: [],      // 行驶的距离 分段
-            _x: -0.05 * win_w,     // 原始 x 坐标
-            x: -0.05 * win_w,      // 当前 x 坐标
+            _x: -0.05 * win_w,  // 原始 x 坐标
+            x: -0.05 * win_w,   // 当前 x 坐标
             his_x: [],  // 历史 x 坐标
             zhen: 0,    // 历史坐标索引
             y: 0,       // 当前 y 坐标
@@ -369,13 +369,13 @@ function createCars(result) {
         obj.s.push(temp_s);
         all_temp_s += temp_s;
         // 中间 n 段
-        for (var j = 2; j <= 4; j++) {
+        for (var j = 2; j <= (on_map_allcount - 1); j++) {
             temp_s = j - all_temp_s + 0.1 + Math.random() * (0.5 - 0.1);
             obj.s.push(temp_s);
             all_temp_s += temp_s;
         }
         // 结尾 1 段
-        temp_s = 5 - all_temp_s + 0.2 + Math.random() * (0.6 - 0.2);
+        temp_s = on_map_allcount - all_temp_s + 0.25 + Math.random() * (0.6 - 0.2);
         obj.s.push(temp_s);
         all_temp_s += temp_s;
 
@@ -425,41 +425,40 @@ function createCars(result) {
         car.y = startMap.y + win_h * 0.19 + car.number * win_h * 0.060 - car.h;
 
         if (i < 9) {
-            car.ape.loadAtlas('res/atlas/paoma_0' + (i + 1) + '.json');
+            car.ape.loadAtlas('res/atlas/paoma_0' + (i + 1) + '_160x160/paoma_0' + (i + 1) + '_160x160.json');
         } else {
-            car.ape.loadAtlas('res/atlas/paoma_10.json');
+            car.ape.loadAtlas('res/atlas/paoma_10_160x160/paoma_10_160x160.json');
         }
         car.ape.interval = 30;
         car.ape.index = 0;
         car.ape.pos(car.x, car.y);
-        car.ape.scale(0.09 * win_w / 499, 0.09 * win_w / 499);
+        car.ape.scale(0.09 * win_w / 160, 0.09 * win_w / 160);
         Laya.stage.addChild(car.ape);
     });
 }
 
 // 获取数据
 function loadData() {
-    $.ajax({
-        url: 'http://m1.ttcai001.com/pc.php?c=pc_common&a=getPmResult',
-        type: 'GET',
-        dataType: 'json',
-        success: function(r) {
-            // console.log(r);
-        }
-    });
-
-    var data =  {
-        period: '123',
-        time: '2017-04-26 14:42:00',
-        result: [3,2,1,6,5,4,9,8,7,10],
-        gysum: [11, '小', '单'],
-        longhu: ['虎', '虎', '龙', '虎', '虎']
+    var res =  {
+        "period": 20170426284,
+        "time": "2017-04-26 22:12:00",
+        "result": ["1", "7", "5", "2", "9", "6", "4", "3", "10", "8"],
+        "gysum": [8, "小", "双"],
+        "longhu": ["虎", "虎", "龙", "虎", "龙"]
     };
 
-    createCars(data.result);
-    initTitle();      // 绘制头部 title
-    initBottom();     // 绘制底部
-    game_controller.is_loadready = true;
+    // $.ajax({
+    //     url: '/pc.php?c=pc_common&a=getPmResult',
+    //     type: 'GET',
+    //     dataType: 'json',
+    //     success: function(res) {
+            createCars(res.result);
+            initTitle(res);   // 绘制头部 title
+            initBottom(res);  // 绘制底部
+            game_controller.is_loadready = true;
+            startNumberRun();
+    //     }
+    // });
 }
 
 // 创建一个 loading 层
@@ -667,7 +666,7 @@ function showRankModal() {
         e.stopPropagation();
     });
     rankModal.btn_back.ape.once('click', this, function() {
-        window.location.reload();
+        window.history.go(-1);
     });
     rankModal.btn_replay.ape.once(Laya.Event.CLICK, this, function(e) {
         // remove 掉自己的弹层
@@ -698,6 +697,8 @@ function showRankModal() {
         startMap.ape.visible = true;
         onMap.ape.pos(onMap.x, onMap.y);
         endMap.ape.pos(endMap.x, endMap.y);
+
+        startNumberRun();
     });
 }
 
