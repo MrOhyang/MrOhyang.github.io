@@ -1,3 +1,5 @@
+$(function() {
+
 var Animation = Laya.Animation;
 var Sprite = Laya.Sprite;
 var Stage = Laya.Stage;
@@ -52,16 +54,16 @@ var loading = null;  // loading 层
 var rankModal = {};  // 终点排名弹框
 
 var game_controller = {
-    'is_ready': false,  // 是否资源加载完毕
+    'is_ready': false,      // 是否资源加载完毕
+    'is_loadready': false,  // 是否数据加载完毕
     'is_run': false     // 是否正在跑
 };
 
 init();           // Laya 环境 初始化
 loadResource();   // 资源预加载
-initTitle();      // 绘制头部 title
-initBottom();     // 绘制底部
 createMap();      // 创建地图
-createCars();     // 创建车辆
+// createCars();     // 创建车辆
+loadData();       // 加载数据 = 创建车辆+title+bottom
 createLoading();  // 创造一个 loading 层
 
 // 点击屏幕开始比赛
@@ -127,7 +129,7 @@ function loadResource() {
 
 // 开场的数字变化动画
 function startNumberRun() {
-    if (!game_controller.is_ready || game_controller.is_run) return ;
+    if (!game_controller.is_ready || !game_controller.is_loadready || game_controller.is_run) return ;
     game_controller.is_run = true;
     startNumber.ape = new Sprite();
     Laya.stage.addChild(startNumber.ape);
@@ -338,9 +340,12 @@ function createMap() {
 }
 
 // 车辆 初始化
-function createCars() {
-    var number_list = [3, 2, 1, 6, 5, 4, 9, 8, 7, 10];
+function createCars(result) {
+    // var number_list = [3, 2, 1, 6, 5, 4, 9, 8, 7, 10];
     // var number_list = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+    number_list = result;
+
+    console.log(number_list);
 
     for (var i = 0; i < 10; i++) {
         var obj = {
@@ -430,6 +435,31 @@ function createCars() {
         car.ape.scale(0.09 * win_w / 499, 0.09 * win_w / 499);
         Laya.stage.addChild(car.ape);
     });
+}
+
+// 获取数据
+function loadData() {
+    $.ajax({
+        url: 'http://m1.ttcai001.com/pc.php?c=pc_common&a=getPmResult',
+        type: 'GET',
+        dataType: 'json',
+        success: function(r) {
+            // console.log(r);
+        }
+    });
+
+    var data =  {
+        period: '123',
+        time: '2017-04-26 14:42:00',
+        result: [3,2,1,6,5,4,9,8,7,10],
+        gysum: [11, '小', '单'],
+        longhu: ['虎', '虎', '龙', '虎', '虎']
+    };
+
+    createCars(data.result);
+    initTitle();      // 绘制头部 title
+    initBottom();     // 绘制底部
+    game_controller.is_loadready = true;
 }
 
 // 创建一个 loading 层
@@ -757,6 +787,8 @@ function musicFadeOut(number, src) {
         SoundManager.stopMusic();
     }
 }
+
+});
 
 
 
