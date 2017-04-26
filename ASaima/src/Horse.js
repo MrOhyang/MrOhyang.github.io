@@ -1,3 +1,5 @@
+$(function() {
+
 var Animation = Laya.Animation;
 var Sprite = Laya.Sprite;
 var Stage = Laya.Stage;
@@ -437,6 +439,15 @@ function createCars(result) {
 
 // 获取数据
 function loadData() {
+    $.ajax({
+        url: 'http://m1.ttcai001.com/pc.php?c=pc_common&a=getPmResult',
+        type: 'GET',
+        dataType: 'json',
+        success: function(r) {
+            // console.log(r);
+        }
+    });
+
     var data =  {
         period: '123',
         time: '2017-04-26 14:42:00',
@@ -776,6 +787,8 @@ function musicFadeOut(number, src) {
         SoundManager.stopMusic();
     }
 }
+
+});
 
 
 
