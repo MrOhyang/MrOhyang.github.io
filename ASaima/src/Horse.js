@@ -120,6 +120,11 @@ function loadResource() {
         }
     }
 
+    // 声音资源
+    for (var key in mp3) {
+        res_list.push({url: mp3[key], type: 'sound'});
+    }
+
     Laya.loader.load(res_list, Handler.create(this, function() {
         console.log('加载完毕');
         game_controller.is_ready = true;
@@ -510,7 +515,6 @@ function onMapRun() {
                 car.ape.stop();
                 // car.ape.index = 0;
             });
-            console.log(car_list[0].ape.index);
             Laya.timer.clear(this, onMapRun);
             Laya.timer.clear(this, carRun);
             Laya.timer.clear(this, sortCarRank);

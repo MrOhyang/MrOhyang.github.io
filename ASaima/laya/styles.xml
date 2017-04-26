@@ -1,3 +1,5 @@
 <res>
-   <item name="paoma" type="" compress="0" pack="1" quality="80" props="" picType="0"/>
+   <item name="comp/paoma_01" type="" compress="0" pack="1" quality="80" props="" picType="0"/>
+   <item name="comp/paoma_02" type="" compress="0" pack="1" quality="80" props="" picType="0"/>
+   <item name="comp/paoma" type="" compress="0" pack="1" quality="80" props="" picType="0"/>
 </res>
